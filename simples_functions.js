@@ -706,7 +706,7 @@ function proLaboreR(receita_mensal, aliquota_efetiva) {
   // var dasBr = receita_mensal * (aliquota_efetiva/100);
   // var dasExt = 0;
 
-  /*** Fator R ***/
+  /*** Fator R = Pro-labore ***/
 
   var fatorR = receita_mensal * 0.28;
   //fatorR = Number(fatorR.toFixed(2));
@@ -716,11 +716,17 @@ function proLaboreR(receita_mensal, aliquota_efetiva) {
   var inssBase = fatorR * 0.11;
   var inss = 0;
 
-  if (inssBase <= 707.70) {
-    inss = inssBase;
+  if (fatorR <= 7613.80) {
+    inss = fatorR * 0.11;
   } else {
-    inss = 707.70;
+    inss = 837.51;
   }
+
+  // if (inssBase <= 707.70) {
+  //   inss = inssBase;
+  // } else {
+  //   inss = 707.70;
+  // }
 
   /*** Cálculo IR ***/
 
