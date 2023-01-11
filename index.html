@@ -97,11 +97,12 @@
           <div class="row">
             <div class="col">
 
+              <!-- Resultado BR -->
               <table id="results" class="table table-bordered text-center">
                 <thead>
                   <tr>
-                    <th rowspan="2" class="align-middle">Alíquota efetiva</th>
-                    <th colspan="6">Percentuais Efetivos dos Tributos</th>
+                    <th rowspan="2" class="align-middle">Alíquota efetiva BR</th>
+                    <th colspan="6">Percentuais Efetivos dos Tributos BR</th>
                   </tr>
                   <tr>
                     <th>IRPJ</th>
@@ -121,6 +122,35 @@
                     <td><span id="pis">0</span></td>
                     <td><span id="cpp">0</span></td>
                     <td><span id="iss">0</span></td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <!-- Resultado Ext -->
+              <table id="results-ext" class="table table-bordered text-center">
+                <thead>
+                  <tr>
+                    <th rowspan="2" class="align-middle">Alíquota efetiva Ext</th>
+                    <th colspan="6">Percentuais Efetivos dos Tributos Ext</th>
+                  </tr>
+                  <tr>
+                    <th>IRPJ</th>
+                    <th>CSLL</th>
+                    <th>Cofins</th>
+                    <th>PIS/PASEP</th>
+                    <th>CPP</th>
+                    <th>ISS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span id="af-ext">0</span></td>
+                    <td><span id="irpj-ext">0</span></td>
+                    <td><span id="csll-ext">0</span></td>
+                    <td><span id="cofins-ext">0</span></td>
+                    <td><span id="pis-ext">0</span></td>
+                    <td><span id="cpp-ext">0</span></td>
+                    <td><span id="iss-ext">0</span></td>
                   </tr>
                 </tbody>
               </table>
@@ -415,14 +445,12 @@
 
     </div>
 
-    
-
   </div>
   
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js" integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js" integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw==" crossorigin="anonymous"></script>
   <script src="simples_functions.js"></script>
   
   <script>
@@ -442,6 +470,10 @@
         $("#cpp").html(res3[5] + "%");
         $("#iss").html(res3[6] + "%");
 
+        $("#irpj-ext").html(res3[1] + "%");
+        $("#csll-ext").html(res3[2] + "%");
+        $("#cpp-ext").html(res3[5] + "%");
+
         /*** NOVO ***/
 
         var receita_mensal = $('#receita').val();
@@ -452,37 +484,41 @@
         var aliquota_ext = Number(res3[1]) + Number(res3[2]) + Number(res3[5]);
         var dasExt = receita_mensal * (aliquota_ext/100);
 
+        $("#af-ext").html(aliquota_ext + "%");
+
         var proLab = proLaboreR(receita_mensal, aliquota_efetiva);
 
         //0:fatorR, 1:inssBase, 2:inss, 3:irBase, 4:ir, 5:valorIR
 
-        $('#dasbr').val(dasBr);
-        $('#dasext').val(dasExt);
+        $('#dasbr').val(dasBr).mask("R$ ###.##0,00");
+        $('#dasext').val(dasExt).mask("R$ ###.##0,00");
 
-        var valorFR = Math.round10(proLab[0], -4);
-        $('#valorFR').html('R$ ' + valorFR);
-        $('#proLab').html('R$ ' + valorFR);
+        // var valorFR = Math.round10(proLab[0], -4);
+        var valorFR = proLab[0];
+        $('#valorFR').html(valorFR).mask("R$ #.##0,00");
+        $('#proLab').html(valorFR).mask("R$ #.##0,00");
 
-        var valorInss = Math.round10(proLab[2], -4);
-        $('#inss').text('R$ ' + valorInss);
+        // var valorInss = Math.round10(proLab[2], -4);
+        var valorInss = proLab[2];
+        $('#inss').text(valorInss).mask("R$ #.##0,00");
         
         $('#aliquotaIr').html('<strong>IR ' + proLab[4] * 100 + '%</strong>');
 
         var totalIr = proLab[5];
-        totalIr = Math.round10(totalIr, -4);
-        $('#ir').html('R$ ' + totalIr);
+        // totalIr = Math.round10(totalIr, -4);
+        $('#ir').html(totalIr).mask("R$ #.##0,00");
 
         var proLaboreLiquido = proLab[3] - proLab[5];
-        proLaboreLiquido = Math.round10(proLaboreLiquido, -4);
-        $('#proLabLiquid').html('R$ ' + proLaboreLiquido);
+        // proLaboreLiquido = Math.round10(proLaboreLiquido, -2);
+        $('#proLabLiquid').html(proLaboreLiquido).mask("R$ #.##0,00");
 
         var psBr = dasBr + proLab[2] + proLab[5];
-        psBr = Math.round10(psBr, -4);
-        $('#psbr').text('R$ ' + psBr);
+        //psBr = Math.round10(psBr, -4);
+        $('#psbr').text(psBr).mask("R$ #.##0,00");
 
         var psExt = dasExt + proLab[2] + proLab[5];
-        psExt = Math.round10(psExt, -4);
-        $('#psext').text('R$ ' + psExt);
+        //psExt = Math.round10(psExt, -4);
+        $('#psext').text(psExt).mask("R$ #.##0,00");
 
       });
     });

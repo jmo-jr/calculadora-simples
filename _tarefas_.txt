@@ -1,0 +1,36 @@
+DONE
+
+1. Acrescentar  a informação da alíquota efetiva do Exterior
+
+  a) Fórmula da alíquota efetiva do Exterior: somar os percentuais de IRPJ, CSLL e CPP - Não entra na soma COFINS, PIS e ISS.
+  b) Se possível permitir que nos campos RBT12 e Receita Mensal sejam informados os valores com vírgulas, ex. 10.500,76
+
+DOING
+
+2. Alterar a Tabela de INSS para os parâmetros abaixo:
+
+  a) Alíquota de INSS Fixa em 11% para pro labore até 7.613,80.
+  b) Se o Cálculo do Fator R 28% representar um pró-labore acima de 7.613,80, o valor do INSS deve ser exato: 837,51, não mais atendendo ao critério de 11% sobre o valor do pró-labore.
+
+3. Acrescentar a opção de informar se tem filhos para abater no cálculo do IR
+
+  a) A informação deve ser aceita apenas de forma numérica de 0 -10
+  b) Cada filho representa uma redução da base de cálculo do IR – Valor de dependentes: 189,59 por filho
+  c) Então na fórmula de cálculo do IR, além de abater da base o valor do INSS, deve abater também o valor de dependente se houver.
+
+4. Quadro de Despesas
+O objetivo é informar outras despesas além dos impostos para identificar os lucros do mês
+
+  a) Sugiro que essas informações devem ficar abaixo da previsão dos impostos.
+  b) O campo deve aceitar apenas informações numéricas.
+  c) A fórmula para encontrar o valor do lucro será: Receita Mensal - Impostos Mensais (Aqui existe uma variação entre DAS BR e DAS EX) - Assessoria Contábil - Outras Despesas = Lucro Líquido
+
+5. Tabela do Anexo III - Fator R
+
+  a) Ter a possibilidade do parâmetro do fator R ser em 28% OU 30%
+
+6. Tabela Lucro Presumido
+
+  a) Acrescentar os mesmo campos do Prolabore que tem em Anexo III e V
+  b) Acrescentar nos custos o encargo INSS PJ que corresponde a 20% do valor do Prolabore. 
+  c) O valor do INSS PJ entrará apenas na fórmula da soma dos impostos mensais.

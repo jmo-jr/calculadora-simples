@@ -1,7 +1,12 @@
-/* 
- * https://github.com/rubengmurray/expected-round
- */
-
+/**
+   * Ajuste decimal de um número.
+   * https://github.com/rubengmurray/expected-round
+   *
+   * @param  {String}  type  O tipo de arredondamento.
+   * @param  {Number}  value  O número a arredondar.
+   * @param  {Integer}  exp    O expoente (o logaritmo decimal da base pretendida).
+   * @returns  {Number}      O valor depois de ajustado.
+   */
 function decimalAdjust(type, value, exp) {
   if (typeof exp === 'undefined' || +exp === 0) {
     return Math[type](value);
@@ -21,9 +26,7 @@ function decimalAdjust(type, value, exp) {
 }
 
 if (!Math.round10) {
-  Math.round10 = function(value, exp) {
-    return decimalAdjust('round', value, exp);
-  };
+  Math.round10 = (value, exp) => decimalAdjust('round', value, exp);
 }
 
 function snthree(B4) {
