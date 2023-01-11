@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="Set-Cookie" content="HttpOnly;Secure;SameSite=Strict">
+  <title>Ellun Contabilidade | Calculadora Tributária</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <style>
+    h1 {
+      font-size: 24px;
+    }
+    button {
+      margin-bottom: 20px;
+    }
+    .inline-input {
+      display: inline-flex;
+      width: 72%;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    #proLab5 { width: auto; }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h1 class="mt-3 mb-3">Calculadora Simples Nacional</h1>
+
+    <!-- TABS -->
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Anexo III</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="anexo-tab" data-toggle="tab" href="#anexo" role="tab" aria-controls="anexo" aria-selected="false">Anexo V</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="lucro-tab" data-toggle="tab" href="#lucro" role="tab" aria-controls="lucro" aria-selected="false">Lucro Presumido</a>
+      </li>
+    </ul>
+
+    <!-- TAB CONTENT -->
+    <div class="tab-content mt-3 mb-3" id="myTabContent">
+
+      <!-- ANEXO III -->
+      <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+
+        <div class="container">
+          <div class="row">
+
+            <!-- COL 1 -->
+            <div class="col-3">
+              <div class="form-group">
+                <label for="rbt12">Seu RBT12</label>
+                <input type="tel" id="rbt123" name="rbt12" class="form-control">
+              </div>
+            </div>
+
+            <!-- COL 2 -->
+            <div class="col-3">
+              <div class="form-group">
+                <label for="receita">Receita mensal</label>
+                <input type="tel" id="receita" name="receita" class="form-control">
+              </div>
+            </div>
+
+            <!-- COL 3 -->
+            <div class="col-3">
+              <div class="form-group">
+                <label for="dasbr">DAS BR</label>
+                <input type="tel" id="dasbr" name="dasbr" class="form-control" disabled>
+              </div>
+            </div>
+
+            <!-- COL 4 -->
+            <div class="col-3">
+              <div class="form-group">
+                <label for="dasext">DAS EX</label>
+                <input type="tel" id="dasext" name="dasext" class="form-control" disabled>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <button type="button" id="btn-three" class="btn btn-primary">Calcular</button>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="container">
+          <div class="row">
+            <div class="col">
+
+              <table id="results" class="table table-bordered text-center">
+                <thead>
+                  <tr>
+                    <th rowspan="2" class="align-middle">Alíquota efetiva</th>
+                    <th colspan="6">Percentuais Efetivos dos Tributos</th>
+                  </tr>
+                  <tr>
+                    <th>IRPJ</th>
+                    <th>CSLL</th>
+                    <th>Cofins</th>
+                    <th>PIS/PASEP</th>
+                    <th>CPP</th>
+                    <th>ISS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span id="af">0</span></td>
+                    <td><span id="irpj">0</span></td>
+                    <td><span id="csll">0</span></td>
+                    <td><span id="cofins">0</span></td>
+                    <td><span id="pis">0</span></td>
+                    <td><span id="cpp">0</span></td>
+                    <td><span id="iss">0</span></td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+          </div>
+
+          <!-- TABELA FATOR R -->
+          <div class="row">
+            <div class="col">
+
+              <table id="fatoR" class="table table-bordered text-center">
+                <thead>
+                  <tr>
+                    <th>Fator R 28%</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td id="valorFR"></td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+          </div>
+
+          <!-- TABELA PRO LABORE -->
+          <div class="row">
+            <div class="col">
+
+              <table id="proLabore" class="table table-bordered">
+                <tbody>
+                  <tr>
+                    <td><strong>Pro-Labore</strong></td>
+                    <td id="proLab">0</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td><strong>INSS 11%</strong></td>
+                    <td id="inss">0</td>
+                    <td>Vencimento dia 20 do mês subsequente</td>
+                  </tr>
+                  <tr>
+                    <td id="aliquotaIr"><strong>IR</strong></td>
+                    <td id="ir">0</td>
+                    <td>Vencimento dia 20 do mês subsequente</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Pro-Labore Líquido</strong></td>
+                    <td id="proLabLiquid">0</td>
+                    <td>Transferir no último dia do mês</td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+          </div>
+
+          <h4>Total de Impostos Mensais</h4>
+          <p><strong>Prestadores de Serviços para Empresas Brasileiras: </strong><span id="psbr"></span></p> 
+          <p><strong>Prestadores de Serviços para Empresas Estrangeiras: </strong><span id="psext"></span></p>
+
+        </div>
+
+      </div>
+
+      <!-- ANEXO V -->
+      <div class="tab-pane fade" id="anexo" role="tabpanel" aria-labelledby="anexo-tab">
+        
+        <div class="container">
+          <div class="row">
+
+            <!-- COL ! -->
+            <div class="col-3">
+              <div class="form-group">
+                <label for="rbt125">Seu RBT12</label>
+                <input type="tel" id="rbt125" name="rbt125" class="form-control">
+              </div>
+            </div>
+
+            <!-- COL 2 -->
+            <div class="col-3">
+              <div class="form-group">
+                <label for="receita5">Receita mensal</label>
+                <input type="tel" id="receita5" name="receita" class="form-control">
+              </div>
+            </div>
+
+            <!-- COL 3 -->
+            <div class="col-3">
+              <div class="form-group">
+                <label for="dasbr5">DAS BR</label>
+                <input type="tel" id="dasbr5" name="dasbr" class="form-control" disabled>
+              </div>
+            </div>
+
+            <!-- COL 4 -->
+            <div class="col-3">
+              <div class="form-group">
+                <label for="dasext5">DAS EX</label>
+                <input type="tel" id="dasext5" name="dasext" class="form-control" disabled>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <button type="button" id="btn-five" class="btn btn-primary">Calcular</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="container">
+          <div class="row">
+            <div class="col">
+
+              <table id="results" class="table table-bordered text-center">
+                <thead>
+                  <tr>
+                    <th rowspan="2" class="align-middle">Alíquota efetiva</th>
+                    <th colspan="6">Percentuais Efetivos dos Tributos</th>
+                  </tr>
+                  <tr>
+                    <th>IRPJ</th>
+                    <th>CSLL</th>
+                    <th>Cofins</th>
+                    <th>PIS/PASEP</th>
+                    <th>CPP</th>
+                    <th>ISS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span id="af5">0</span></td>
+                    <td><span id="irpj5">0</span></td>
+                    <td><span id="csll5">0</span></td>
+                    <td><span id="cofins5">0</span></td>
+                    <td><span id="pis5">0</span></td>
+                    <td><span id="cpp5">0</span></td>
+                    <td><span id="iss5">0</span></td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+          </div>
+
+          <!-- TABELA PRO LABORE -->
+          <div class="row">
+            <div class="col">
+
+              <table id="proLabore" class="table table-bordered">
+                <tbody>
+                  <tr>
+                    <td><strong>Pro-Labore</strong></td>
+                    <td>R$ 
+                      <div class="inline-input">
+                        <input type="tel" id="proLab5" name="rbt12" class="form-control">
+                        <button type="button" id="recalcular" class="btn btn-primary">Recalcular</button>
+                      </div>
+                    </td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td><strong>INSS 11%</strong></td>
+                    <td id="inss5">0</td>
+                    <td>Vencimento dia 20 do mês subsequente</td>
+                  </tr>
+                  <tr>
+                    <td id="aliquotaIr5"><strong>IR</strong></td>
+                    <td id="ir5">0</td>
+                    <td>Vencimento dia 20 do mês subsequente</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Pro-Labore Líquido</strong></td>
+                    <td id="proLabLiquid5">0</td>
+                    <td>Transferir no último dia do mês</td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+          </div>
+
+          <h4>Total de Impostos Mensais</h4>
+          <p><strong>Prestadores de Serviços para Empresas Brasileiras: </strong><span id="psbr5"></span></p> 
+          <p><strong>Prestadores de Serviços para Empresas Estrangeiras: </strong><span id="psext5"></span></p>
+
+        </div>
+
+      </div>
+
+      <!-- LUCRO PRESUMIDO -->
+      <div class="tab-pane fade" id="lucro" role="tabpanel" aria-labelledby="lucro-tab">
+        
+        <div class="container">
+          <div class="row">
+
+            <!-- Receita -->
+            <div class="col-3">
+              <div class="form-group">
+                <label for="salario">Receita Mensal</label>
+                <input type="tel" id="salario" class="form-control">
+              </div>
+            </div>
+
+            <!-- ISS -->
+            <div class="col-3">
+              <div class="form-group">
+                <label for="issSelect">ISS</label>
+                <select id="issSelect" class="form-control">
+                  <option>Escolha a alíquota</option>
+                  <option value="0.02">2%</option>
+                  <option value="0.05">5%</option>
+                </select>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <button type="button" id="btn-lucro" class="btn btn-primary">Calcular</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="container">
+          <div class="row">
+            <div class="col">
+
+              <table id="presumido" class="table table-bordered text-center">
+                <thead>
+                  <tr>
+                    <th colspan="5">Lucro Presumido</th>
+                  </tr>
+                  <tr>
+                    <th>PIS</th>
+                    <th>Cofins</th>
+                    <th>ISS</th>
+                    <th>IRPJ</th>
+                    <th>CSLL</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>0,65%</th>
+                    <th>3,00%</th>
+                    <th id="issSelected">Escolha</th>
+                    <th>4,80%</th>
+                    <th>2,88%</th>
+                  </tr>
+                  <tr>
+                    <td><span id="pisLucro">0</span></td>
+                    <td><span id="cofinsLucro">0</span></td>
+                    <td><span id="issLucro">0</span></td>
+                    <td><span id="irpjLucro">0</span></td>
+                    <td><span id="csllLucro">0</span></td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+          </div>
+
+          <!-- TABELA PRO LABORE -->
+          <div class="row">
+            <div class="col">
+
+              <table id="irpjAdicional" class="table table-bordered" style="width:60%">
+                <tbody>
+                  <tr>
+                    <td><strong>IRPJ ADC (10%)</strong></td>
+                    <td>Base 32%</td>
+                    <td id="irpjAdc">R$ 0</td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+          </div>
+
+          <h4>Imposto Mensal a Pagar</h4>
+          <p><strong>Impostos a Pagar BR: </strong><span id="psbrLucro"></span></p> 
+          <p><strong>Impostos a Pagar EX: </strong><span id="psextLucro"></span></p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    
+
+  </div>
+  
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js" integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw==" crossorigin="anonymous"></script>
+  <script src="simples_functions.js"></script>
+  
+  <script>
+    $(document).ready( function() {
+
+      $('#btn-three').click( function() {
+
+        var value = $('#rbt123').val();
+
+        var res3 = snthree(value);
+
+        $("#af").html(res3[0] + "%");
+        $("#irpj").html(res3[1] + "%");
+        $("#csll").html(res3[2] + "%");
+        $("#cofins").html(res3[3] + "%");
+        $("#pis").html(res3[4] + "%");
+        $("#cpp").html(res3[5] + "%");
+        $("#iss").html(res3[6] + "%");
+
+        /*** NOVO ***/
+
+        var receita_mensal = $('#receita').val();
+        var aliquota_efetiva = res3[0];
+
+        var dasBr = receita_mensal * (aliquota_efetiva/100);
+        
+        var aliquota_ext = Number(res3[1]) + Number(res3[2]) + Number(res3[5]);
+        var dasExt = receita_mensal * (aliquota_ext/100);
+
+        var proLab = proLaboreR(receita_mensal, aliquota_efetiva);
+
+        //0:fatorR, 1:inssBase, 2:inss, 3:irBase, 4:ir, 5:valorIR
+
+        $('#dasbr').val(dasBr);
+        $('#dasext').val(dasExt);
+
+        var valorFR = Math.round10(proLab[0], -4);
+        $('#valorFR').html('R$ ' + valorFR);
+        $('#proLab').html('R$ ' + valorFR);
+
+        var valorInss = Math.round10(proLab[2], -4);
+        $('#inss').text('R$ ' + valorInss);
+        
+        $('#aliquotaIr').html('<strong>IR ' + proLab[4] * 100 + '%</strong>');
+
+        var totalIr = proLab[5];
+        totalIr = Math.round10(totalIr, -4);
+        $('#ir').html('R$ ' + totalIr);
+
+        var proLaboreLiquido = proLab[3] - proLab[5];
+        proLaboreLiquido = Math.round10(proLaboreLiquido, -4);
+        $('#proLabLiquid').html('R$ ' + proLaboreLiquido);
+
+        var psBr = dasBr + proLab[2] + proLab[5];
+        psBr = Math.round10(psBr, -4);
+        $('#psbr').text('R$ ' + psBr);
+
+        var psExt = dasExt + proLab[2] + proLab[5];
+        psExt = Math.round10(psExt, -4);
+        $('#psext').text('R$ ' + psExt);
+
+      });
+    });
+  </script>
+  
+  <!-- SCRIPTS ANEXO V -->
+  <script>
+    $(document).ready( function() {
+
+      $('#btn-five').click( function() {
+
+        var value = $('#rbt125').val();
+
+        var res5 = snfive(value);
+
+        $("#af5").html(res5[0] + "%");
+        $("#irpj5").html(res5[1] + "%");
+        $("#csll5").html(res5[2] + "%");
+        $("#cofins5").html(res5[3] + "%");
+        $("#pis5").html(res5[4] + "%");
+        $("#cpp5").html(res5[5] + "%");
+        $("#iss5").html(res5[6] + "%");
+
+        /*** NOVO ***/
+
+        var receita_mensal = $('#receita5').val();
+        var aliquota_efetiva = res5[0];
+
+        var dasBr = receita_mensal * (aliquota_efetiva/100);
+
+        var aliquota_ext = Number(res5[1]) + Number(res5[2]) + Number(res5[5]);
+        var dasExt = receita_mensal * (aliquota_ext/100);
+
+        var proLab = proLaboreR(receita_mensal, aliquota_efetiva);
+        // proLab = [0;fatorR, 1:inssBase, 2:inss, 3:irBase, 4:ir, 5:valorIR]
+
+        $('#dasbr5').val(dasBr);
+        $('#dasext5').val(dasExt);
+
+        /*** TABELA PRO LABORE ***/
+
+        var salario = Math.round10(proLab[0], -4);
+        $('#proLab5').val(salario);
+
+        // Se valor for alterado, usa esse
+        var proLab5 = $('#proLab5').val();
+
+        /* Cálculo INSS */
+
+        var valorInss = Math.round10(proLab[2], -4);
+        $('#inss5').text('R$ ' + valorInss);
+
+        /* Calculo IR */
+        var percentIR = Math.round10(proLab[4], -4);
+        $('#aliquotaIr5').html('<strong>IR ' + percentIR * 100 + '%</strong>');
+
+        var totalIr = proLab[5];
+        totalIr = Math.round10(totalIr, -4);
+        $('#ir5').html('R$ ' + totalIr);
+
+        /* PL Liquido */
+
+        var proLaboreLiquido = proLab[3] - proLab[5];
+        proLaboreLiquido = Math.round10(proLaboreLiquido, -4);
+        $('#proLabLiquid5').html('R$ ' + proLaboreLiquido);
+
+        /*** IMPOSTOS MENSAIS ***/
+
+        var psBr = dasBr + proLab[2] + proLab[5];
+        psBr = Math.round10(psBr, -4);
+        $('#psbr5').text('R$ ' + psBr);
+
+        var psExt = dasExt + proLab[2] + proLab[5];
+        psExt = Math.round10(psExt, -4);
+        $('#psext5').text('R$ ' + psExt);
+        
+      });
+
+      /**
+       * Recálculo do IR e INSS ao alterar o valor do salário
+       **/
+
+      $('#recalcular').click(function() {
+        // Se valor for alterado, usa esse
+        var proLab5 = $('#proLab5').val();
+
+        /*** Cálculo INSS ***/
+
+        var inssBase = proLab5 * 0.11;
+        var inss = 0;
+
+        if (inssBase <= 707.70) {
+          inss = inssBase;
+        } else {
+          inss = 707.70;
+        }
+
+        var valorInss = Math.round10(inss, -4);
+        $('#inss5').text('R$ ' + valorInss);
+
+        /*** Cálculo IR ***/
+
+        var irBase = proLab5 - inss;
+        let ir = 0;
+        let reduzir = null;
+
+        if (irBase <= 1903.98) {
+          ir = 0;
+          reduzir = 0;
+        }
+        if (irBase >= 1903.98 && irBase <= 2826.65) {
+          ir = 0.075;
+          reduzir = 142.80;
+        }
+        if (irBase >= 2826.66 && irBase <= 3751.05) {
+          ir = 0.15;
+          reduzir = 354.80;
+        }
+        if (irBase >= 3751.06 && irBase <= 4664.68) {
+          ir = 0.2250;
+          reduzir = 636.13;
+        }
+        if (irBase > 4664.68) {
+          ir = 0.2750;
+          reduzir = 869.36;
+        }
+
+        var valorIR = (irBase * ir) - reduzir;
+
+        $('#aliquotaIr5').html('<strong>IR ' + ir * 100 + '%</strong>');
+
+        var totalIr = valorIR;
+        totalIr = Math.round10(totalIr, -4);
+        $('#ir5').html('R$ ' + totalIr);
+
+        /*** PL Liquido ***/
+
+        var proLaboreLiquido = irBase - valorIR;
+        proLaboreLiquido = Math.round10(proLaboreLiquido, -4);
+        $('#proLabLiquid5').html('R$ ' + proLaboreLiquido);
+
+        /*** IMPOSTOS MENSAIS ***/
+
+        var receita_mensal = $('#receita5').val();
+        var fatorR = receita_mensal * 0.28;
+
+        var aliquota_efetiva = parseFloat($("#af5").html());
+        var irpj = parseFloat($("#irpj5").html());
+        var csll = parseFloat($("#csll5").html());
+        var cpp = parseFloat($("#cpp5").html());
+        
+        var dasBr = receita_mensal * (aliquota_efetiva/100);
+
+        var aliquota_ext = Number(irpj) + Number(csll) + Number(cpp);
+        var dasExt = receita_mensal * (aliquota_ext/100);
+
+        var psBr = dasBr + inss + valorIR;
+        psBr = Math.round10(psBr, -4);
+        $('#psbr5').text('R$ ' + psBr);
+
+        var psExt = dasExt + inss + valorIR;
+        psExt = Math.round10(psExt, -4);
+        $('#psext5').text('R$ ' + psExt);
+      })
+    });
+  </script>
+  
+  <!-- SCRIPTS LUCRO -->
+  <script>
+    $(document).ready( function() {
+      $('#btn-lucro').click( function() {
+
+        var salario = $('#salario').val();
+        var aliquota_iss = $('#issSelect').val();
+
+        var result = lucroPresumido(salario, aliquota_iss);
+
+        $("#pisLucro").html('R$ ' + result[0]);
+        $("#cofinsLucro").html('R$ ' + result[1]);
+        $("#issLucro").html('R$ ' + result[2]);
+        $("#irpjLucro").html('R$ ' + result[3]);
+        $("#csllLucro").html('R$ ' + result[4]);
+
+        $("#issSelected").html((aliquota_iss * 100) + "%");
+        
+        $("#irpjAdc").html('R$ ' + result[5]);
+
+        var irTotal = result.reduce((a, b) => a + b, 0);
+
+        console.log(irTotal);
+
+// Imposto a Pagar BR (Considerar todos os Impostos + IRPJ Adc)
+// Imposto a Pagar EX (Que vai considerar somente IRPJ, CSLL e IRPJ Adc)
+
+        $("#psbrLucro").html('R$ ' + (irTotal + result[5]));
+        $("#psextLucro").html('R$ ' + (result[3] + result[4] + result[5]));
+
+      });
+    });
+  </script>
+
+</body>
+</html>
