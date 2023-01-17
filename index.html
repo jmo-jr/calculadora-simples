@@ -29,7 +29,7 @@
 
     <h1 class="mt-3 mb-3">Calculadora Simples Nacional</h1>
 
-    <!-- TABS -->
+    <!-- NAVIGATION TABS -->
     <ul class="nav nav-tabs" id="myTab" role="tablist">
       <li class="nav-item">
         <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Anexo III</a>
@@ -42,7 +42,7 @@
       </li>
     </ul>
 
-    <!-- TAB CONTENT -->
+    <!-- TABS  CONTENT -->
     <div class="tab-content mt-3 mb-3" id="myTabContent">
 
       <!-- ANEXO III -->
@@ -52,33 +52,41 @@
           <div class="row">
 
             <!-- COL 1 -->
-            <div class="col-3">
+            <div class="col-2">
               <div class="form-group">
-                <label for="rbt12">Seu RBT12</label>
+                <label for="rbt12">Seu RBT12 (R$)</label>
                 <input type="tel" id="rbt123" name="rbt12" class="form-control">
               </div>
             </div>
 
             <!-- COL 2 -->
-            <div class="col-3">
+            <div class="col-2">
               <div class="form-group">
-                <label for="receita">Receita mensal</label>
+                <label for="receita">Receita mensal (R$)</label>
                 <input type="tel" id="receita" name="receita" class="form-control">
               </div>
             </div>
 
             <!-- COL 3 -->
-            <div class="col-3">
+            <div class="col-2">
               <div class="form-group">
-                <label for="dasbr">DAS BR</label>
+                <label for="receita">Nº de dependentes</label>
+                <input type="number" id="dependentes" name="dependentes" class="form-control" min="0" max="10">
+              </div>
+            </div>
+
+            <!-- COL 4 -->
+            <div class="col-2">
+              <div class="form-group">
+                <label for="dasbr">DAS BR (R$)</label>
                 <input type="tel" id="dasbr" name="dasbr" class="form-control" disabled>
               </div>
             </div>
 
             <!-- COL 4 -->
-            <div class="col-3">
+            <div class="col-2">
               <div class="form-group">
-                <label for="dasext">DAS EX</label>
+                <label for="dasext">DAS Ext (R$)</label>
                 <input type="tel" id="dasext" name="dasext" class="form-control" disabled>
               </div>
             </div>
@@ -213,6 +221,17 @@
           <h4>Total de Impostos Mensais</h4>
           <p><strong>Prestadores de Serviços para Empresas Brasileiras: </strong><span id="psbr"></span></p> 
           <p><strong>Prestadores de Serviços para Empresas Estrangeiras: </strong><span id="psext"></span></p>
+
+          <h4>Quadro de Despesas</h4>
+          <p>
+            <strong>Acessoria contábil: </strong><input type="tel" id="acessoria" name="acessoria" class="form-control">
+          </p>
+          <p>
+            <strong>Outras despesas: </strong><input type="tel" id="outras" name="outras" class="form-control">
+          </p>
+          <button type="button" id="btnUpdLl" class="btn btn-primary">Atualizar</button>
+          <!-- Lucro Líquido = Receita Mensal - Impostos Mensais (Aqui existe uma variação entre DAS BR e DAS EX) - Assessoria Contábil - Outras Despesas  -->
+          <p><strong>Lucro líquido: </strong><span id="lucroLiquido"></span></p>
 
         </div>
 
@@ -453,12 +472,20 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js" integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw==" crossorigin="anonymous"></script>
   <script src="simples_functions.js"></script>
   
+  <!-- SCRIPTS ANEXO III -->
   <script>
     $(document).ready( function() {
 
       $('#btn-three').click( function() {
 
-        var value = $('#rbt123').val();
+        var value = 0;
+        var receita_mensal = 0;
+        var deps = 0;
+        var res3 = [];
+
+        value = $('#rbt123').val();
+        receita_mensal = $('#receita').val();
+        deps = $('#dependentes').val();
 
         var res3 = snthree(value);
 
@@ -476,7 +503,6 @@
 
         /*** NOVO ***/
 
-        var receita_mensal = $('#receita').val();
         var aliquota_efetiva = res3[0];
 
         var dasBr = receita_mensal * (aliquota_efetiva/100);
@@ -504,8 +530,9 @@
         
         $('#aliquotaIr').html('<strong>IR ' + proLab[4] * 100 + '%</strong>');
 
-        var totalIr = proLab[5];
-        // totalIr = Math.round10(totalIr, -4);
+        var depValue = 189.59;
+        var totalIr = 0;
+        deps > 0 ? totalIr = proLab[5] - (deps * depValue) : totalIr = proLab[5]
         $('#ir').html(totalIr).mask("R$ #.##0,00");
 
         var proLaboreLiquido = proLab[3] - proLab[5];
@@ -521,6 +548,16 @@
         $('#psext').text(psExt).mask("R$ #.##0,00");
 
       });
+
+      $('#btnUpdLl').click( function() {
+        var asseCont = $('#acessoria').val();
+        var outrasDesps = $('#outras').val();
+
+        var lucroLiquido = 
+
+        $('#lucroLiquido').html();
+      });
+
     });
   </script>
   
