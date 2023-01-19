@@ -9,8 +9,6 @@ DONE
   a) Alíquota de INSS Fixa em 11% para pro labore até 7.613,80.
   b) Se o Cálculo do Fator R 28% representar um pró-labore acima de 7.613,80, o valor do INSS deve ser exato: 837,51, não mais atendendo ao critério de 11% sobre o valor do pró-labore.
 
-DOING
-
 3. Acrescentar a opção de informar se tem filhos para abater no cálculo do IR
 
   a) A informação deve ser aceita apenas de forma numérica de 0 -10
@@ -27,6 +25,8 @@ O objetivo é informar outras despesas além dos impostos para identificar os lu
 5. Tabela do Anexo III - Fator R
 
   a) Ter a possibilidade do parâmetro do fator R ser em 28% OU 30%
+
+DOING
 
 6. Tabela Lucro Presumido
 

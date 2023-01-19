@@ -49,12 +49,14 @@
       <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
 
         <div class="container">
+
+          <!-- RECEBIMENTOS NO BRASIL -->
           <div class="row">
 
             <!-- COL 1 -->
             <div class="col-2">
               <div class="form-group">
-                <label for="rbt12">Seu RBT12 (R$)</label>
+                <label for="rbt12">RBT12 (R$)</label>
                 <input type="tel" id="rbt123" name="rbt12" class="form-control">
               </div>
             </div>
@@ -67,19 +69,32 @@
               </div>
             </div>
 
-            <!-- COL 3 -->
-            <div class="col-2">
-              <div class="form-group">
-                <label for="receita">Nº de dependentes</label>
-                <input type="number" id="dependentes" name="dependentes" class="form-control" min="0" max="10">
-              </div>
-            </div>
-
             <!-- COL 4 -->
             <div class="col-2">
               <div class="form-group">
                 <label for="dasbr">DAS BR (R$)</label>
                 <input type="tel" id="dasbr" name="dasbr" class="form-control" disabled>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- RECEBIMENTOS NO EXTERIOR -->
+          <div class="row">
+
+            <!-- COL 1 -->
+            <div class="col-2">
+              <div class="form-group">
+                <label for="rbt12Ext">RBT12 Exterior</label>
+                <input type="tel" id="rbt123Ext" name="rbt12Ext" class="form-control">
+              </div>
+            </div>
+
+            <!-- COL 2 -->
+            <div class="col-2">
+              <div class="form-group">
+                <label for="receitaExt">Receita mensal Ext</label>
+                <input type="tel" id="receitaExt" name="receitaExt" class="form-control">
               </div>
             </div>
 
@@ -90,7 +105,16 @@
                 <input type="tel" id="dasext" name="dasext" class="form-control" disabled>
               </div>
             </div>
+          </div>
 
+          <div class="row">
+            <!-- Nº DEPENDENTES -->
+            <div class="col-2">
+              <div class="form-group">
+                <label for="receita">Nº de dependentes</label>
+                <input type="number" id="dependentes" name="dependentes" class="form-control" min="0" max="10">
+              </div>
+            </div>
           </div>
 
           <div class="row">
@@ -173,7 +197,13 @@
               <table id="fatoR" class="table table-bordered text-center">
                 <thead>
                   <tr>
-                    <th>Fator R 28%</th>
+                    <th>
+                      Fator R &nbsp;
+                      <select name="percentFR" id="percentFR" class="form-control d-inline" style="width: 80px">
+                        <option value="0.28" selected>28%</option>
+                        <option value="0.3">30%</option>
+                      </select>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -224,13 +254,13 @@
 
           <h4>Quadro de Despesas</h4>
           <p>
-            <strong>Acessoria contábil: </strong><input type="tel" id="acessoria" name="acessoria" class="form-control">
+            <strong>Acessoria contábil: </strong><input type="tel" id="acessoria" name="acessoria" class="form-control d-inline" style="width:150px">
           </p>
           <p>
-            <strong>Outras despesas: </strong><input type="tel" id="outras" name="outras" class="form-control">
+            <strong>Outras despesas: </strong><input type="tel" id="outras" name="outras" class="form-control d-inline" style="width:150px">
           </p>
           <button type="button" id="btnUpdLl" class="btn btn-primary">Atualizar</button>
-          <!-- Lucro Líquido = Receita Mensal - Impostos Mensais (Aqui existe uma variação entre DAS BR e DAS EX) - Assessoria Contábil - Outras Despesas  -->
+          
           <p><strong>Lucro líquido: </strong><span id="lucroLiquido"></span></p>
 
         </div>
@@ -437,7 +467,7 @@
             </div>
           </div>
 
-          <!-- TABELA PRO LABORE -->
+          <!-- IRPJ -->
           <div class="row">
             <div class="col">
 
@@ -447,6 +477,48 @@
                     <td><strong>IRPJ ADC (10%)</strong></td>
                     <td>Base 32%</td>
                     <td id="irpjAdc">R$ 0</td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+          </div>
+
+          <!-- TABELA PRO LABORE LP -->
+          <div class="row">
+            <div class="col">
+
+              <table id="proLaboreLp" class="table table-bordered">
+                <tbody>
+                  <tr>
+                    <td><strong>Pro-Labore</strong></td>
+                    <td>R$ 
+                      <div class="inline-input">
+                        <input type="tel" id="proLabLp" name="proLabLp" class="form-control">
+                        <button type="button" id="recalcularLp" class="btn btn-primary">Recalcular</button>
+                      </div>
+                    </td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td><strong>INSS 11%</strong></td>
+                    <td id="inssLp">0</td>
+                    <td>Vencimento dia 20 do mês subsequente</td>
+                  </tr>
+                  <tr>
+                    <td><strong>INSS PJ 20%</strong></td>
+                    <td id="inssPjLp">0</td>
+                    <td>Vencimento dia 20 do mês subsequente</td>
+                  </tr>
+                  <tr>
+                    <td id="aliquotaIrLp"><strong>IR</strong></td>
+                    <td id="irLp">0</td>
+                    <td>Vencimento dia 20 do mês subsequente</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Pro-Labore Líquido</strong></td>
+                    <td id="proLabLiquidoLp">0</td>
+                    <td>Transferir no último dia do mês</td>
                   </tr>
                 </tbody>
               </table>
@@ -478,16 +550,21 @@
 
       $('#btn-three').click( function() {
 
-        var value = 0;
+        var rbtBr = 0;
         var receita_mensal = 0;
+        var rbtExt = 0;
+        var rbtExt = 0;
         var deps = 0;
         var res3 = [];
 
-        value = $('#rbt123').val();
+        rbtBr = $('#rbt123').val();
         receita_mensal = $('#receita').val();
+        rbtExt = $('#rbt123').val();
+        receitaExt = $('#receitaExt').val();
         deps = $('#dependentes').val();
 
-        var res3 = snthree(value);
+        var res3 = snthree(rbtBr);
+        var res3Ext = snthree(rbtExt);
 
         $("#af").html(res3[0] + "%");
         $("#irpj").html(res3[1] + "%");
@@ -497,22 +574,25 @@
         $("#cpp").html(res3[5] + "%");
         $("#iss").html(res3[6] + "%");
 
-        $("#irpj-ext").html(res3[1] + "%");
-        $("#csll-ext").html(res3[2] + "%");
-        $("#cpp-ext").html(res3[5] + "%");
+        $("#irpj-ext").html(res3Ext[1] + "%");
+        $("#csll-ext").html(res3Ext[2] + "%");
+        $("#cpp-ext").html(res3Ext[5] + "%");
 
         /*** NOVO ***/
 
         var aliquota_efetiva = res3[0];
-
         var dasBr = receita_mensal * (aliquota_efetiva/100);
         
-        var aliquota_ext = Number(res3[1]) + Number(res3[2]) + Number(res3[5]);
-        var dasExt = receita_mensal * (aliquota_ext/100);
+        var aliquota_ext = Number(res3Ext[1]) + Number(res3Ext[2]) + Number(res3Ext[5]);
+        var dasExt = receitaExt * (aliquota_ext/100);
 
         $("#af-ext").html(aliquota_ext + "%");
 
-        var proLab = proLaboreR(receita_mensal, aliquota_efetiva);
+        var percentR = $('#percentFR').val();
+        var porcentagem = Number(percentR);
+
+        var proLab = proLaboreR(receita_mensal, aliquota_efetiva, porcentagem);
+        var proLabExt = proLaboreR(receitaExt, aliquota_ext, porcentagem);
 
         //0:fatorR, 1:inssBase, 2:inss, 3:irBase, 4:ir, 5:valorIR
 
@@ -543,19 +623,33 @@
         //psBr = Math.round10(psBr, -4);
         $('#psbr').text(psBr).mask("R$ #.##0,00");
 
-        var psExt = dasExt + proLab[2] + proLab[5];
+        var psExt = dasExt + proLabExt[2] + proLabExt[5];
         //psExt = Math.round10(psExt, -4);
         $('#psext').text(psExt).mask("R$ #.##0,00");
 
       });
 
+      /*
+       * Função para cálculo do Lucro Líquido
+       *
+       * Lucro Líquido = Receita Mensal - Impostos Mensais (variando entre DAS BR e DAS EX) 
+       * - Assessoria Contábil - Outras Despesas
+       */
+
       $('#btnUpdLl').click( function() {
+        var receita = $('#receita').val();
+        var dasBr = $('#dasbr').cleanVal();
+        var dasExt = $('#dasext').cleanVal();
+        var dasExtVal = 0;
+        dasExt > 0 ? dasExtVal = dasExt : dasExtVal = 0;
         var asseCont = $('#acessoria').val();
         var outrasDesps = $('#outras').val();
 
-        var lucroLiquido = 
+        var lucroLiquido = receita - dasBr - dasExtVal - asseCont - outrasDesps;
 
-        $('#lucroLiquido').html();
+        $('#lucroLiquido').text(lucroLiquido).mask("R$ #.##0,00");
+
+        console.log(receita, dasBr, dasExt, asseCont, outrasDesps)
       });
 
     });
@@ -595,7 +689,9 @@
         $('#dasbr5').val(dasBr);
         $('#dasext5').val(dasExt);
 
-        /*** TABELA PRO LABORE ***/
+        /*
+         * TABELA PRO LABORE 
+         */
 
         var salario = Math.round10(proLab[0], -4);
         $('#proLab5').val(salario);
@@ -635,7 +731,7 @@
       });
 
       /**
-       * Recálculo do IR e INSS ao alterar o valor do salário
+       * Recálculo do IR e INSS ao alterar o valor do Pro-Labore
        **/
 
       $('#recalcular').click(function() {
@@ -745,15 +841,102 @@
 
         var irTotal = result.reduce((a, b) => a + b, 0);
 
-        console.log(irTotal);
+        /*
+         * TABELA PRO LABORE LP
+         */
 
-// Imposto a Pagar BR (Considerar todos os Impostos + IRPJ Adc)
-// Imposto a Pagar EX (Que vai considerar somente IRPJ, CSLL e IRPJ Adc)
+        var proLab = proLaboreR(salario, aliquota_iss);
+
+        var salario2 = Math.round10(proLab[0], -4);
+        $('#proLabLp').val(salario2);
+
+        // Se valor for alterado, usa esse
+        var proLabLp = $('#proLabLp').val();
+
+        // Cálculo INSS
+
+        var valorInss = Math.round10(proLab[2], -4);
+        $('#inssLp').text('R$ ' + valorInss);
+
+        var inssPj = proLabLp * 0.2;
+        var valorInssPj = Math.round10(inssPj, -4);
+        $('#inssPjLp').text('R$ ' + valorInssPj);
+
+        // Calculo IR
+        var percentIR = Math.round10(proLab[4], -4);
+        $('#aliquotaIr5').html('<strong>IR ' + percentIR * 100 + '%</strong>');
+
+        var totalIr = proLab[5];
+        totalIr = Math.round10(totalIr, -4);
+        $('#ir5').html('R$ ' + totalIr);
+
+        // PL Liquido
+        var proLaboreLiquido = proLab[3] - proLab[5];
+        proLaboreLiquido = Math.round10(proLaboreLiquido, -4);
+        $('#proLabLiquid5').html('R$ ' + proLaboreLiquido);
+
+        /* 
+         * Imposto a Pagar BR (Considerar todos os Impostos + IRPJ Adc)
+         * Imposto a Pagar EX (Que vai considerar somente IRPJ, CSLL e IRPJ Adc)
+         */
 
         $("#psbrLucro").html('R$ ' + (irTotal + result[5]));
         $("#psextLucro").html('R$ ' + (result[3] + result[4] + result[5]));
 
       });
+
+      $('#recalcularLp').click( function() {
+        // Se valor for alterado, usa esse
+        var proLabLp = $('#proLabLp').val();
+        var salario = $('#salario').val();
+        var aliquota_iss = $('#issSelect').val();
+
+        var proLab = proLaboreR(salario, aliquota_iss);
+
+        /*** Cálculo INSS ***/
+
+        var inssBase = proLabLp * 0.11;
+        var inss = 0;
+
+        if (inssBase <= 707.70) {
+          inss = inssBase;
+        } else {
+          inss = 707.70;
+        }
+
+        var valorInss = Math.round10(inss, -4);
+        $('#inssLp').text('R$ ' + valorInss);
+
+        /*** Cálculo INSS PJ ***/
+
+        var inssPj = proLabLp * 0.2;
+
+        var valorInssPj = Math.round10(inssPj, -4);
+        $('#inssPjLp').text('R$ ' + valorInssPj);
+
+        // Calculo IR
+        var percentIR = Math.round10(proLab[4], -4);
+        $('#aliquotaIr5').html('<strong>IR ' + percentIR * 100 + '%</strong>');
+
+        var totalIr = proLab[5];
+        totalIr = Math.round10(totalIr, -4);
+        $('#ir5').html('R$ ' + totalIr);
+
+        // PL Liquido
+        var proLaboreLiquido = proLab[3] - proLab[5];
+        proLaboreLiquido = Math.round10(proLaboreLiquido, -4);
+        $('#proLabLiquid5').html('R$ ' + proLaboreLiquido);
+
+        /*** IMPOSTOS MENSAIS ***/
+
+        var salario = $('#salario').val();
+        var aliquota_iss = $('#issSelect').val();
+
+        var lpResult = lucroPresumido(salario, aliquota_iss);
+
+        $("#psbrLucro").html('R$ ' + (totalIr + inssPj + lpResult[5]));
+        $("#psextLucro").html('R$ ' + (lpResult[3] + lpResult[4] + lpResult[5]));
+      })
     });
   </script>
 

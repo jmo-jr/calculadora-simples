@@ -1,12 +1,12 @@
-/**
-   * Ajuste decimal de um número.
-   * https://github.com/rubengmurray/expected-round
-   *
-   * @param  {String}  type  O tipo de arredondamento.
-   * @param  {Number}  value  O número a arredondar.
-   * @param  {Integer}  exp    O expoente (o logaritmo decimal da base pretendida).
-   * @returns  {Number}      O valor depois de ajustado.
-   */
+/*
+ * Ajuste decimal de um número.
+ * https://github.com/rubengmurray/expected-round
+ *
+ * @param  {String}  type  O tipo de arredondamento.
+ * @param  {Number}  value  O número a arredondar.
+ * @param  {Integer}  exp    O expoente (o logaritmo decimal da base pretendida).
+ * @returns  {Number}      O valor depois de ajustado.
+ */
 function decimalAdjust(type, value, exp) {
   if (typeof exp === 'undefined' || +exp === 0) {
     return Math[type](value);
@@ -24,7 +24,6 @@ function decimalAdjust(type, value, exp) {
   value = value.toString().split('e');
   return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
 }
-
 if (!Math.round10) {
   Math.round10 = (value, exp) => decimalAdjust('round', value, exp);
 }
@@ -699,7 +698,7 @@ function snfive(B4) {
 
 }
 
-function proLaboreR(receita_mensal, aliquota_efetiva) {
+function proLaboreR(receita_mensal, aliquota_efetiva, percentagem) {
 
   /*** DAS ***/
         
@@ -708,7 +707,15 @@ function proLaboreR(receita_mensal, aliquota_efetiva) {
 
   /*** Fator R = Pro-labore ***/
 
-  var fatorR = receita_mensal * 0.28;
+  var percentPl = 0;
+
+  if (percentagem == undefined) {
+    percentPl = 0.28;
+  } else {
+    percentPl = percentagem
+  }
+
+  var fatorR = receita_mensal * percentPl;
   //fatorR = Number(fatorR.toFixed(2));
 
   /*** Cálculo INSS ***/
@@ -760,6 +767,19 @@ function proLaboreR(receita_mensal, aliquota_efetiva) {
   return [ fatorR, inssBase, inss, irBase, ir, valorIR ];
 }
 
+/*
+ * Cálculo do Lucro Presumifo
+ *
+ * @param  {Number}  salario  O valor do salário.
+ * @param  {Number}  aliquota_iss  A alíquota escolhida.
+ * 
+ * @returns {Number} 0 pis.
+ * @returns {Number} 1 cofins.
+ * @returns {Number} 2 inss.
+ * @returns {Number} 3 irpj.
+ * @returns {Number} 4 csll.
+ * @returns {Number} 5 irpjAdc.
+ */
 function lucroPresumido(salario, aliquota_iss) {
 
   var pisIr = 0.0065;
