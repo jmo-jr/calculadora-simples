@@ -498,7 +498,6 @@
                         <button type="button" id="recalcularLp" class="btn btn-primary">Recalcular</button>
                       </div>
                     </td>
-                    <td></td>
                   </tr>
                   <tr>
                     <td><strong>INSS 11%</strong></td>
@@ -701,16 +700,16 @@
 
         /* Cálculo INSS */
 
-        var valorInss = Math.round10(proLab[2], -4);
-        $('#inss5').text('R$ ' + valorInss);
+        //var valorInss = Math.round10(proLab[2], -4);
+        $('#inss5').text(proLab[2]).mask("R$ #.##0,00");
 
         /* Calculo IR */
         var percentIR = Math.round10(proLab[4], -4);
         $('#aliquotaIr5').html('<strong>IR ' + percentIR * 100 + '%</strong>');
 
         var totalIr = proLab[5];
-        totalIr = Math.round10(totalIr, -4);
-        $('#ir5').html('R$ ' + totalIr);
+        //totalIr = Math.round10(totalIr, -4);
+        $('#ir5').html('R$ ' + totalIr).mask("R$ #.##0,00");
 
         /* PL Liquido */
 
@@ -721,12 +720,12 @@
         /*** IMPOSTOS MENSAIS ***/
 
         var psBr = dasBr + proLab[2] + proLab[5];
-        psBr = Math.round10(psBr, -4);
-        $('#psbr5').text('R$ ' + psBr);
+        //psBr = Math.round10(psBr, -4);
+        $('#psbr5').text('R$ ' + psBr).mask("R$ #.##0,00");
 
         var psExt = dasExt + proLab[2] + proLab[5];
-        psExt = Math.round10(psExt, -4);
-        $('#psext5').text('R$ ' + psExt);
+        //psExt = Math.round10(psExt, -4);
+        $('#psext5').text('R$ ' + psExt).mask("R$ #.##0,00");
         
       });
 
@@ -847,45 +846,55 @@
 
         var proLab = proLaboreR(salario, aliquota_iss);
 
-        var salario2 = Math.round10(proLab[0], -4);
-        $('#proLabLp').val(salario2);
+        /*** Campo Pro-Labore ***/
+        $('#proLabLp').val(proLab[0]);
 
         // Se valor for alterado, usa esse
-        var proLabLp = $('#proLabLp').val();
+        var proLabLp = $('#proLabLp').unmask().val();
 
-        // Cálculo INSS
+        /*** Linha INSS ***/
+        var valorInss = proLab[2];
+        $('#inssLp').text(valorInss).mask("R$ #.##0,00");
 
-        var valorInss = Math.round10(proLab[2], -4);
-        $('#inssLp').text('R$ ' + valorInss);
-
+        /*** Linha INSS PJ ***/
         var inssPj = proLabLp * 0.2;
-        var valorInssPj = Math.round10(inssPj, -4);
-        $('#inssPjLp').text('R$ ' + valorInssPj);
+        $('#inssPjLp').text(inssPj).mask("R$ #.##0,00");
 
-        // Calculo IR
+        /*** Linha IR ***/
+
+        /* Porcentagem IR */
         var percentIR = Math.round10(proLab[4], -4);
-        $('#aliquotaIr5').html('<strong>IR ' + percentIR * 100 + '%</strong>');
+        $('#aliquotaIrLp').html('<strong>IR ' + percentIR * 100 + '%</strong>');
 
+        /* Valor IR */
         var totalIr = proLab[5];
-        totalIr = Math.round10(totalIr, -4);
-        $('#ir5').html('R$ ' + totalIr);
+        $('#irLp').html(totalIr).mask("R$ #.##0,00");
 
-        // PL Liquido
+        /*** Linha Pro-Labore Líquido ***/
         var proLaboreLiquido = proLab[3] - proLab[5];
-        proLaboreLiquido = Math.round10(proLaboreLiquido, -4);
-        $('#proLabLiquid5').html('R$ ' + proLaboreLiquido);
+        //proLaboreLiquido = Math.round10(proLaboreLiquido, -4);
+        $('#proLabLiquidoLp').html(proLaboreLiquido).mask("R$ #.##0,00");
 
         /* 
+         * IMPOSTO MENSAL A PAGAR
+         *
          * Imposto a Pagar BR (Considerar todos os Impostos + IRPJ Adc)
          * Imposto a Pagar EX (Que vai considerar somente IRPJ, CSLL e IRPJ Adc)
          */
 
-        $("#psbrLucro").html('R$ ' + (irTotal + result[5]));
-        $("#psextLucro").html('R$ ' + (result[3] + result[4] + result[5]));
+        $("#psbrLucro").html((irTotal + result[5])).mask("R$ #.##0,00");
+        $("#psextLucro").html((result[3] + result[4] + result[5])).mask("R$ #.##0,00");
 
       });
 
+      /***************************************
+       *
+       * RECALCULAR PRO-LABORE LUCRO PRESUMIDO
+       * 
+       ***************************************/
+
       $('#recalcularLp').click( function() {
+
         // Se valor for alterado, usa esse
         var proLabLp = $('#proLabLp').val();
         var salario = $('#salario').val();
@@ -904,28 +913,24 @@
           inss = 707.70;
         }
 
-        var valorInss = Math.round10(inss, -4);
-        $('#inssLp').text('R$ ' + valorInss);
+        /*** Cálculo INSS ***/
+        $('#inssLp').text(inss).mask("R$ #.##0,00");
 
         /*** Cálculo INSS PJ ***/
-
         var inssPj = proLabLp * 0.2;
+        $('#inssPjLp').text(inssPj).mask("R$ #.##0,00");
 
-        var valorInssPj = Math.round10(inssPj, -4);
-        $('#inssPjLp').text('R$ ' + valorInssPj);
-
-        // Calculo IR
+        /*** Cálculo IR ***/
+        /* Porcentagem IR */
         var percentIR = Math.round10(proLab[4], -4);
         $('#aliquotaIr5').html('<strong>IR ' + percentIR * 100 + '%</strong>');
-
+        /* Valor IR */
         var totalIr = proLab[5];
-        totalIr = Math.round10(totalIr, -4);
-        $('#ir5').html('R$ ' + totalIr);
+        $('#ir5').html(totalIr).mask("R$ #.##0,00");
 
-        // PL Liquido
+        /*** Pro-Labora Líquido ***/
         var proLaboreLiquido = proLab[3] - proLab[5];
-        proLaboreLiquido = Math.round10(proLaboreLiquido, -4);
-        $('#proLabLiquid5').html('R$ ' + proLaboreLiquido);
+        $('#proLabLiquid5').html(proLaboreLiquido).mask("R$ #.##0,00");
 
         /*** IMPOSTOS MENSAIS ***/
 
@@ -934,8 +939,12 @@
 
         var lpResult = lucroPresumido(salario, aliquota_iss);
 
-        $("#psbrLucro").html('R$ ' + (totalIr + inssPj + lpResult[5]));
-        $("#psextLucro").html('R$ ' + (lpResult[3] + lpResult[4] + lpResult[5]));
+        $("#psbrLucro").html((totalIr + inssPj + lpResult[5])).mask("R$ #.##0,00");
+        $("#psextLucro").html((lpResult[3] + lpResult[4] + lpResult[5])).mask("R$ #.##0,00");
+
+        console.log('INSS:'+inss, 'INSSPJ:'+inssPj, 'IR%:'+percentIR, 'IR:'+totalIr, 'PROLAB:'+proLaboreLiquido, 'SAL:'+salario, 'ISS:'+aliquota_iss);
+
+        console.log();
       })
     });
   </script>
