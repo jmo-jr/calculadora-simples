@@ -20,13 +20,12 @@ O objetivo é informar outras despesas além dos impostos para identificar os lu
 
   a) Sugiro que essas informações devem ficar abaixo da previsão dos impostos.
   b) O campo deve aceitar apenas informações numéricas.
-  c) A fórmula para encontrar o valor do lucro será: Receita Mensal - Impostos Mensais (Aqui existe uma variação entre DAS BR e DAS EX) - Assessoria Contábil - Outras Despesas = Lucro Líquido
+  c) A fórmula para encontrar o valor do lucro será: Receita Mensal - Pro-Labore - Impostos Mensais (Aqui existe uma variação entre DAS BR e DAS EX) - Assessoria Contábil - Outras Despesas = Lucro Líquido
 
 5. Tabela do Anexo III - Fator R
 
   a) Ter a possibilidade do parâmetro do fator R ser em 28% OU 30%
 
-DOING
 
 6. Tabela Lucro Presumido
 

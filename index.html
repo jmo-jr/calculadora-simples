@@ -506,7 +506,7 @@
                   </tr>
                   <tr>
                     <td><strong>INSS PJ 20%</strong></td>
-                    <td id="inssPjLp">0</td>
+                    <td><span id="inssPjLp">0</span></td>
                     <td>Vencimento dia 20 do mês subsequente</td>
                   </tr>
                   <tr>
@@ -847,18 +847,20 @@
         var proLab = proLaboreR(salario, aliquota_iss);
 
         /*** Campo Pro-Labore ***/
-        $('#proLabLp').val(proLab[0]);
-
-        // Se valor for alterado, usa esse
-        var proLabLp = $('#proLabLp').unmask().val();
+        //var valorProLabore = Math.round10(proLab[0], -4);
+        var valorProLabore = proLab[0].toFixed(2);
+        $('#proLabLp').val(valorProLabore).mask("##.##0,00", {reverse: true});
 
         /*** Linha INSS ***/
-        var valorInss = proLab[2];
-        $('#inssLp').text(valorInss).mask("R$ #.##0,00");
+        var valorInss = maskValue(proLab[2]);
+        $('#inssLp').text(valorInss);
 
         /*** Linha INSS PJ ***/
-        var inssPj = proLabLp * 0.2;
-        $('#inssPjLp').text(inssPj).mask("R$ #.##0,00");
+        var valorInssPj = valorProLabore * 0.2;
+        //var inssPj = valorInssPj.toFixed(2);
+        var inssPj = maskValue(valorInssPj);
+
+        $('#inssPjLp').text(inssPj);
 
         /*** Linha IR ***/
 

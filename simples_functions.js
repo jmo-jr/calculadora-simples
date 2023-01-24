@@ -28,6 +28,10 @@ if (!Math.round10) {
   Math.round10 = (value, exp) => decimalAdjust('round', value, exp);
 }
 
+function maskValue(value) {
+  return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+}
+
 function snthree(B4) {
 
   var B14 = 0, B15 = 0, B16 = 0, B17 = 0, B18 = 0, B19 = 0;
@@ -768,7 +772,7 @@ function proLaboreR(receita_mensal, aliquota_efetiva, percentagem) {
 }
 
 /*
- * Cálculo do Lucro Presumifo
+ * Cálculo do Lucro Presumido
  *
  * @param  {Number}  salario  O valor do salário.
  * @param  {Number}  aliquota_iss  A alíquota escolhida.
