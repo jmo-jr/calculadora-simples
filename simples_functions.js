@@ -32,6 +32,27 @@ function maskValue(value) {
   return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
 }
 
+function maskNumber(value) {
+  return new Intl.NumberFormat('pt-BR').format(value);
+}
+
+function addDecimal(value) {
+  return value * 0.01;
+}
+
+/*
+ * Cálculo do Simples Nacional Anexo III
+ *
+ * @param  {Number}  B4  O RBT12.
+ * 
+ * @returns {Number} 0 aliquota_efetiva.
+ * @returns {Number} 1 irpj.
+ * @returns {Number} 2 csll.
+ * @returns {Number} 3 cofins.
+ * @returns {Number} 4 pis_pasep.
+ * @returns {Number} 5 cpp.
+ * @returns {Number} 6 iss.
+ */
 function snthree(B4) {
 
   var B14 = 0, B15 = 0, B16 = 0, B17 = 0, B18 = 0, B19 = 0;
@@ -702,21 +723,37 @@ function snfive(B4) {
 
 }
 
-function proLaboreR(receita_mensal, aliquota_efetiva, percentagem) {
-
-  /*** DAS ***/
-        
-  // var dasBr = receita_mensal * (aliquota_efetiva/100);
-  // var dasExt = 0;
+/*
+ * Cálculo do Pró-Labore
+ *
+ * @param   {Number}  receita_mensal    Receita mensal.
+ * @param   {Number}  aliquota_efetiva  Aliquota ISS.
+ * @param   {Number}  percentagem       .
+ * @param   {Number}  numDeps           Nº dependentes.
+ * 
+ * @returns {Number} 0 fatorR.
+ * @returns {Number} 1 inssBase.
+ * @returns {Number} 2 inss.
+ * @returns {Number} 3 irBase.
+ * @returns {Number} 4 ir (porcentagem).
+ * @returns {Number} 5 valorIR.
+ */
+function proLaboreR(receita_mensal, aliquota_efetiva, percentagem, numDeps) {
 
   /*** Fator R = Pro-labore ***/
 
   var percentPl = 0;
+  var descontoDeps = 0;
+  var depValue = 189.59;
 
   if (percentagem == undefined) {
     percentPl = 0.28;
   } else {
     percentPl = percentagem
+  }
+
+  if (numDeps != undefined) {
+    descontoDeps = numDeps * depValue;
   }
 
   var fatorR = receita_mensal * percentPl;
@@ -741,7 +778,7 @@ function proLaboreR(receita_mensal, aliquota_efetiva, percentagem) {
 
   /*** Cálculo IR ***/
 
-  var irBase = fatorR - inss;
+  var irBase = fatorR - inss - descontoDeps;
   let ir = 0;
   let reduzir = null;
 

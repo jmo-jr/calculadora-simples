@@ -40,3 +40,7 @@ O objetivo é informar outras despesas além dos impostos para identificar os lu
 9. Adicionar um header com logo da Ellun
 
 10. Adicionar campos de BTR12 e Salário no exterior
+
+DÚVIDAS
+
+1. O calculo do Pró-labore e IR, INSS

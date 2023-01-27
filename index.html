@@ -7,6 +7,11 @@
   <title>Ellun Contabilidade | Calculadora Tributária</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <style>
+    header {
+      height: 80px;
+      padding: 8px 16px;
+      background-color: rgba(0, 0, 0, 0.62);
+    }
     h1 {
       font-size: 24px;
     }
@@ -15,7 +20,7 @@
     }
     .inline-input {
       display: inline-flex;
-      width: 72%;
+      width: 67%;
       justify-content: space-between;
       align-items: flex-start;
     }
@@ -24,6 +29,14 @@
 </head>
 
 <body>
+
+  <header>
+    <div class="container">
+      <a class="navbar-brand" href="https://ellun.com.br">
+        <img src="https://ellun.com.br/wp-content/uploads/2019/08/1.png" alt="Ellun Contabilidade" width="120">
+      </a>
+    </div>
+  </header>
 
   <div class="container">
 
@@ -46,7 +59,7 @@
     <div class="tab-content mt-3 mb-3" id="myTabContent">
 
       <!-- ANEXO III -->
-      <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+      <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
 
         <div class="container">
 
@@ -57,7 +70,7 @@
             <div class="col-2">
               <div class="form-group">
                 <label for="rbt12">RBT12 (R$)</label>
-                <input type="tel" id="rbt123" name="rbt12" class="form-control">
+                <input type="tel" id="rbt123" name="rbt12" class="money-mask form-control" data-mask="0.000.000,00" data-mask-reverse="true" value="0">
               </div>
             </div>
 
@@ -65,11 +78,11 @@
             <div class="col-2">
               <div class="form-group">
                 <label for="receita">Receita mensal (R$)</label>
-                <input type="tel" id="receita" name="receita" class="form-control">
+                <input type="tel" id="receita" name="receita" class="money-mask form-control" data-mask="0.000.000,00" data-mask-reverse="true" value="0">
               </div>
             </div>
 
-            <!-- COL 4 -->
+            <!-- COL 3 -->
             <div class="col-2">
               <div class="form-group">
                 <label for="dasbr">DAS BR (R$)</label>
@@ -86,7 +99,7 @@
             <div class="col-2">
               <div class="form-group">
                 <label for="rbt12Ext">RBT12 Exterior</label>
-                <input type="tel" id="rbt123Ext" name="rbt12Ext" class="form-control">
+                <input type="tel" id="rbt123Ext" name="rbt12Ext" class="money-mask form-control" data-mask="0.000.000,00" data-mask-reverse="true" value="0">
               </div>
             </div>
 
@@ -94,7 +107,7 @@
             <div class="col-2">
               <div class="form-group">
                 <label for="receitaExt">Receita mensal Ext</label>
-                <input type="tel" id="receitaExt" name="receitaExt" class="form-control">
+                <input type="tel" id="receitaExt" name="receitaExt" class="money-mask form-control" data-mask="0.000.000,00" data-mask-reverse="true" value="0">
               </div>
             </div>
 
@@ -112,7 +125,7 @@
             <div class="col-2">
               <div class="form-group">
                 <label for="receita">Nº de dependentes</label>
-                <input type="number" id="dependentes" name="dependentes" class="form-control" min="0" max="10">
+                <input type="number" id="dependentes" name="dependentes" class="form-control" min="0" max="10" value="0">
               </div>
             </div>
           </div>
@@ -268,37 +281,60 @@
       </div>
 
       <!-- ANEXO V -->
-      <div class="tab-pane fade" id="anexo" role="tabpanel" aria-labelledby="anexo-tab">
+      <div class="tab-pane fade show active" id="anexo" role="tabpanel" aria-labelledby="anexo-tab">
         
         <div class="container">
+
+          <!-- RECEBIMENTOS NO BRASIL -->
           <div class="row">
 
-            <!-- COL ! -->
-            <div class="col-3">
+            <!-- COL 1 -->
+            <div class="col-2">
               <div class="form-group">
-                <label for="rbt125">Seu RBT12</label>
-                <input type="tel" id="rbt125" name="rbt125" class="form-control">
+                <label for="rbt125">RBT12 (R$)</label>
+                <input type="tel" id="rbt125" name="rbt125" class="form-control" data-mask="0.000.000,00" data-mask-reverse="true" value="10000000">
               </div>
             </div>
 
             <!-- COL 2 -->
-            <div class="col-3">
+            <div class="col-2">
               <div class="form-group">
-                <label for="receita5">Receita mensal</label>
-                <input type="tel" id="receita5" name="receita" class="form-control">
+                <label for="receita5">Receita mensal (R$)</label>
+                <input type="tel" id="receita5" name="receita" class="form-control" data-mask="0.000.000,00" data-mask-reverse="true" value="1000000">
               </div>
             </div>
 
             <!-- COL 3 -->
-            <div class="col-3">
+            <div class="col-2">
               <div class="form-group">
-                <label for="dasbr5">DAS BR</label>
+                <label for="dasbr5">DAS BR (R$)</label>
                 <input type="tel" id="dasbr5" name="dasbr" class="form-control" disabled>
               </div>
             </div>
 
-            <!-- COL 4 -->
-            <div class="col-3">
+          </div>
+
+          <!-- RECEBIMENTOS NO EXTERIOR -->
+          <div class="row">
+
+            <!-- COL 1 -->
+            <div class="col-2">
+              <div class="form-group">
+                <label for="rbt12Ext5">RBT12 Exterior</label>
+                <input type="tel" id="rbt12Ext5" name="rbt12Ext5" class="form-control" data-mask="0.000.000,00" data-mask-reverse="true" value="20000000">
+              </div>
+            </div>
+
+            <!-- COL 2 -->
+            <div class="col-2">
+              <div class="form-group">
+                <label for="receitaExt5">Receita mensal Ext</label>
+                <input type="tel" id="receitaExt5" name="receitaExt5" class="form-control" data-mask="0.000.000,00" data-mask-reverse="true" value="2000000">
+              </div>
+            </div>
+
+            <!-- COL 3 -->
+            <div class="col-2">
               <div class="form-group">
                 <label for="dasext5">DAS EX</label>
                 <input type="tel" id="dasext5" name="dasext" class="form-control" disabled>
@@ -314,15 +350,18 @@
           </div>
         </div>
 
+        <!-- PERCENTUAIS -->
+
         <div class="container">
           <div class="row">
             <div class="col">
 
+              <!-- Resultado BR -->
               <table id="results" class="table table-bordered text-center">
                 <thead>
                   <tr>
-                    <th rowspan="2" class="align-middle">Alíquota efetiva</th>
-                    <th colspan="6">Percentuais Efetivos dos Tributos</th>
+                    <th rowspan="2" class="align-middle">Alíquota efetiva BR</th>
+                    <th colspan="6">Percentuais Efetivos dos Tributos BR</th>
                   </tr>
                   <tr>
                     <th>IRPJ</th>
@@ -346,6 +385,35 @@
                 </tbody>
               </table>
 
+              <!-- Resultado Ext -->
+              <table id="results-ext" class="table table-bordered text-center">
+                <thead>
+                  <tr>
+                    <th rowspan="2" class="align-middle">Alíquota efetiva Exterior</th>
+                    <th colspan="6">Percentuais Efetivos dos Tributos Ext</th>
+                  </tr>
+                  <tr>
+                    <th>IRPJ</th>
+                    <th>CSLL</th>
+                    <th>Cofins</th>
+                    <th>PIS/PASEP</th>
+                    <th>CPP</th>
+                    <th>ISS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span id="af5-ext">0</span></td>
+                    <td><span id="irpj5-ext">0</span></td>
+                    <td><span id="csll5-ext">0</span></td>
+                    <td><span id="cofins5-ext">0</span></td>
+                    <td><span id="pis5-ext">0</span></td>
+                    <td><span id="cpp5-ext">0</span></td>
+                    <td><span id="iss5-ext">0</span></td>
+                  </tr>
+                </tbody>
+              </table>
+
             </div>
           </div>
 
@@ -359,7 +427,7 @@
                     <td><strong>Pro-Labore</strong></td>
                     <td>R$ 
                       <div class="inline-input">
-                        <input type="tel" id="proLab5" name="rbt12" class="form-control">
+                        <input type="tel" id="proLab5" name="rbt12" class="form-control" style="width:150px">
                         <button type="button" id="recalcular" class="btn btn-primary">Recalcular</button>
                       </div>
                     </td>
@@ -389,6 +457,22 @@
           <h4>Total de Impostos Mensais</h4>
           <p><strong>Prestadores de Serviços para Empresas Brasileiras: </strong><span id="psbr5"></span></p> 
           <p><strong>Prestadores de Serviços para Empresas Estrangeiras: </strong><span id="psext5"></span></p>
+
+          <h4>Quadro de Despesas</h4>
+          <p>
+            <strong>Acessoria contábil: </strong>
+            <input type="tel" id="acessoria5" name="acessoria" class="form-control d-inline" style="width:150px">
+          </p>
+          <p>
+            <strong>Outras despesas: </strong>
+            <input type="tel" id="outras5" name="outras" class="form-control d-inline" style="width:150px">
+          </p>
+          <button type="button" id="btnUpdLl5" class="btn btn-primary">Atualizar</button>
+          
+          <p>
+            <strong>Lucro líquido: </strong>
+            <span id="lucroLiquido5"></span>
+          </p>
 
         </div>
 
@@ -546,109 +630,140 @@
   <!-- SCRIPTS ANEXO III -->
   <script>
     $(document).ready( function() {
+ 
+      function calcSn3() {
 
-      $('#btn-three').click( function() {
+        var rbtBr = addDecimal($('#rbt123').cleanVal());
+        var receita_mensal = addDecimal($('#receita').cleanVal());
+        var rbtExt = addDecimal($('#rbt123Ext').cleanVal());
+        var receitaExt = addDecimal($('#receitaExt').cleanVal());
+        var deps = $('#dependentes').val();
 
-        var rbtBr = 0;
-        var receita_mensal = 0;
-        var rbtExt = 0;
-        var rbtExt = 0;
-        var deps = 0;
-        var res3 = [];
+        /* RESULTADO BR */
 
-        rbtBr = $('#rbt123').val();
-        receita_mensal = $('#receita').val();
-        rbtExt = $('#rbt123').val();
-        receitaExt = $('#receitaExt').val();
-        deps = $('#dependentes').val();
+        if(rbtBr > 0) {
+          var res3 = snthree(rbtBr);
 
-        var res3 = snthree(rbtBr);
-        var res3Ext = snthree(rbtExt);
+          var aliquota_efetiva = res3[0];
+          var irpjBr = res3[1];
+          var csllBr = res3[2];
+          var cofinsBr = res3[3];
+          var pisBr = res3[4];
+          var cppBr = res3[5];
+          var issBr = res3[6];
 
-        $("#af").html(res3[0] + "%");
-        $("#irpj").html(res3[1] + "%");
-        $("#csll").html(res3[2] + "%");
-        $("#cofins").html(res3[3] + "%");
-        $("#pis").html(res3[4] + "%");
-        $("#cpp").html(res3[5] + "%");
-        $("#iss").html(res3[6] + "%");
+          $("#af").html(maskNumber(aliquota_efetiva) + "%");
+          $("#irpj").html(maskNumber(irpjBr) + "%");
+          $("#csll").html(maskNumber(csllBr) + "%");
+          $("#cofins").html(maskNumber(cofinsBr) + "%");
+          $("#pis").html(maskNumber(pisBr) + "%");
+          $("#cpp").html(maskNumber(cppBr) + "%");
+          $("#iss").html(maskNumber(issBr) + "%");
+        }
 
-        $("#irpj-ext").html(res3Ext[1] + "%");
-        $("#csll-ext").html(res3Ext[2] + "%");
-        $("#cpp-ext").html(res3Ext[5] + "%");
+        if(receita_mensal > 0) {
+          dasBr = receita_mensal * (aliquota_efetiva/100);
+          dasBrDec = dasBr.toFixed(2);
+          $('#dasbr').val(dasBrDec).mask("0.000,00", { reverse: true });
+        } else {
+          dasBr = 0;
+          $('#dasbr').val(dasBr);
+        }
 
-        /*** NOVO ***/
+        /* RESULTADO EXT */
 
-        var aliquota_efetiva = res3[0];
-        var dasBr = receita_mensal * (aliquota_efetiva/100);
+        if(rbtExt > 0) { 
+          var res3Ext = snthree(rbtExt);
+
+          var aliquota_ext = Number(res3Ext[1]) + Number(res3Ext[2]) + Number(res3Ext[5]);
+          var irpjExt = res3Ext[1];
+          var csllExt = res3Ext[2];
+          var cppExt = res3Ext[5];
+
+          $("#af-ext").html(maskNumber(aliquota_ext) + "%");
+          $("#irpj-ext").html(maskNumber(irpjExt) + "%");
+          $("#csll-ext").html(maskNumber(csllExt) + "%");
+          $("#cpp-ext").html(maskNumber(cppExt) + "%");
+        } else {
+          $("#af-ext").text(0);
+          $("#irpj-ext").text(0);
+          $("#csll-ext").text(0);
+          $("#cpp-ext").text(0);
+        }
+
+        if(receitaExt > 0) {
+          dasExt = receitaExt * (aliquota_ext/100);
+          dasExtDec = dasExt.toFixed(2);
+          $('#dasext').val(dasExtDec).mask("0.000,00", { reverse: true });
+        } else {
+          dasExt = 0;
+          dasExtDec = 0;
+          $('#dasext').val(dasExt);
+        }
         
-        var aliquota_ext = Number(res3Ext[1]) + Number(res3Ext[2]) + Number(res3Ext[5]);
-        var dasExt = receitaExt * (aliquota_ext/100);
-
-        $("#af-ext").html(aliquota_ext + "%");
+        /* TABELA FATOR R */
 
         var percentR = $('#percentFR').val();
         var porcentagem = Number(percentR);
 
-        var proLab = proLaboreR(receita_mensal, aliquota_efetiva, porcentagem);
-        var proLabExt = proLaboreR(receitaExt, aliquota_ext, porcentagem);
+        /* TABELA PRO-LABORE */
 
-        //0:fatorR, 1:inssBase, 2:inss, 3:irBase, 4:ir, 5:valorIR
+        var proLab = proLaboreR(receita_mensal, aliquota_efetiva, porcentagem, deps);
 
-        $('#dasbr').val(dasBr).mask("R$ ###.##0,00");
-        $('#dasext').val(dasExt).mask("R$ ###.##0,00");
+        valorFR = proLab[0];
+        $('#valorFR').html(maskValue(valorFR));
 
-        // var valorFR = Math.round10(proLab[0], -4);
-        var valorFR = proLab[0];
-        $('#valorFR').html(valorFR).mask("R$ #.##0,00");
-        $('#proLab').html(valorFR).mask("R$ #.##0,00");
+        $('#proLab').html(maskValue(valorFR));
 
-        // var valorInss = Math.round10(proLab[2], -4);
         var valorInss = proLab[2];
-        $('#inss').text(valorInss).mask("R$ 000,00");
+        $('#inss').text(maskValue(valorInss));
         
-        $('#aliquotaIr').html('<strong>IR ' + proLab[4] * 100 + '%</strong>');
+        var percentIr = proLab[4]
+        $('#aliquotaIr').html('<strong>IR ' + percentIr * 100 + '%</strong>');
 
-        var depValue = 189.59;
-        var totalIr = 0;
-        deps > 0 ? totalIr = proLab[5] - (deps * depValue) : totalIr = proLab[5]
-        $('#ir').html(totalIr).mask("R$ #.##0,00");
+        var valorIr = proLab[5];
+        $('#ir').html(maskValue(valorIr));
 
-        var proLaboreLiquido = proLab[3] - proLab[5];
-        // proLaboreLiquido = Math.round10(proLaboreLiquido, -2);
-        $('#proLabLiquid').html(proLaboreLiquido).mask("R$ #.##0,00");
+        var valorIrBase = proLab[3];
+        var proLaboreLiquido = valorIrBase - valorIr;
+        $('#proLabLiquid').html(maskValue(proLaboreLiquido));
 
-        var psBr = dasBr + proLab[2] + proLab[5];
-        //psBr = Math.round10(psBr, -4);
-        $('#psbr').text(psBr).mask("R$ #.##0,00");
+        var proLabExt = proLaboreR(receitaExt, aliquota_ext, porcentagem, deps);
+
+        /* Total de Impostos Mensais */
+
+        var psBr = dasBr + valorInss + valorIr;
+        $('#psbr').text(maskValue(psBr));
 
         var psExt = dasExt + proLabExt[2] + proLabExt[5];
-        //psExt = Math.round10(psExt, -4);
-        $('#psext').text(psExt).mask("R$ #.##0,00");
+        $('#psext').text(maskValue(psExt));
 
-      });
+        /* Lucro Líquido inicial*/
+
+        var lucroLiquido = receita_mensal - valorFR - dasBrDec - dasExtDec;
+        $('#lucroLiquido').text(maskValue(lucroLiquido));
+      }
+      
+      $('#btn-three').click(calcSn3);
+
+      $('#percentFR').change(calcSn3);
 
       /*
        * Função para cálculo do Lucro Líquido
        *
-       * Lucro Líquido = Receita Mensal - Impostos Mensais (variando entre DAS BR e DAS EX) 
+       * Lucro Líquido = Receita Mensal - Pro-Labore - Impostos Mensais (variando entre DAS BR e DAS EX) 
        * - Assessoria Contábil - Outras Despesas
        */
 
       $('#btnUpdLl').click( function() {
-        var receita = $('#receita').val();
-        var dasBr = $('#dasbr').cleanVal();
-        var dasExt = $('#dasext').cleanVal();
-        var dasExtVal = 0;
-        dasExt > 0 ? dasExtVal = dasExt : dasExtVal = 0;
+        var receita = addDecimal($('#receita').cleanVal());
+        var dasBr = $('#dasbr').val();
+        var dasExt = $('#dasext').val();
         var asseCont = $('#acessoria').val();
         var outrasDesps = $('#outras').val();
 
-        var lucroLiquido = receita - dasBr - dasExtVal - asseCont - outrasDesps;
-
-        $('#lucroLiquido').text(lucroLiquido).mask("R$ #.##0,00");
-
-        console.log(receita, dasBr, dasExt, asseCont, outrasDesps)
+        var lucroLiquido = receita - valorFR - dasBrDec - dasExtDec - asseCont - outrasDesps;
+        $('#lucroLiquido').text(maskValue(lucroLiquido));
       });
 
     });
@@ -656,86 +771,124 @@
   
   <!-- SCRIPTS ANEXO V -->
   <script>
-    $(document).ready( function() {
+    $(document).ready( function() { 
+        
+      function calcSn5() {
 
-      $('#btn-five').click( function() {
+        var rbtBr5 = addDecimal($('#rbt125').cleanVal());
+        receitaBr = addDecimal($('#receita5').cleanVal());
+        var rbtExt5 = addDecimal($('#rbt12Ext5').cleanVal());
+        var receitaExt5 = addDecimal($('#receitaExt5').cleanVal());
 
-        var value = $('#rbt125').val();
+        /* RESULTADO BR */
 
-        var res5 = snfive(value);
+        if(rbtBr5 > 0) {
+          var res5 = snfive(rbtBr5);
 
-        $("#af5").html(res5[0] + "%");
-        $("#irpj5").html(res5[1] + "%");
-        $("#csll5").html(res5[2] + "%");
-        $("#cofins5").html(res5[3] + "%");
-        $("#pis5").html(res5[4] + "%");
-        $("#cpp5").html(res5[5] + "%");
-        $("#iss5").html(res5[6] + "%");
+          aliquota_efetiva5 = res5[0];
+          var irpjBr = res5[1];
+          var csllBr = res5[2];
+          var cofinsBr = res5[3];
+          var pisBr = res5[4];
+          var cppBr = res5[5];
+          var issBr = res5[6];
 
-        /*** NOVO ***/
+          $("#af5").html(maskNumber(aliquota_efetiva5) + "%");
+          $("#irpj5").html(maskNumber(irpjBr) + "%");
+          $("#csll5").html(maskNumber(csllBr) + "%");
+          $("#cofins5").html(maskNumber(cofinsBr) + "%");
+          $("#pis5").html(maskNumber(pisBr) + "%");
+          $("#cpp5").html(maskNumber(cppBr) + "%");
+          $("#iss5").html(maskNumber(issBr) + "%");
+        }
 
-        var receita_mensal = $('#receita5').val();
-        var aliquota_efetiva = res5[0];
+        if(receitaBr > 0) {
+          dasBr5 = receitaBr * (aliquota_efetiva5/100);
+          dasBr5Dec = dasBr5.toFixed(2);
+          $('#dasbr5').val(dasBr5Dec).mask("0.000,00", { reverse: true });
+        } else {
+          dasBr5 = 0;
+          $('#dasbr5').val(dasBr5)
+        }
 
-        var dasBr = receita_mensal * (aliquota_efetiva/100);
+        /* RESULTADO EXT */
 
-        var aliquota_ext = Number(res5[1]) + Number(res5[2]) + Number(res5[5]);
-        var dasExt = receita_mensal * (aliquota_ext/100);
+        if(rbtExt5 > 0) {
+          var res5Ext = snfive(rbtExt5);
 
-        var proLab = proLaboreR(receita_mensal, aliquota_efetiva);
-        // proLab = [0;fatorR, 1:inssBase, 2:inss, 3:irBase, 4:ir, 5:valorIR]
+          var aliquota_ext = Number(irpjBr) + Number(csllBr) + Number(cppBr);
+          var irpjExt = res5Ext[1];
+          var csllExt = res5Ext[2];
+          var cppExt = res5Ext[5];
 
-        $('#dasbr5').val(dasBr);
-        $('#dasext5').val(dasExt);
+          $("#af5-ext").html(maskNumber(aliquota_ext) + "%");
+          $("#irpj5-ext").html(maskNumber(irpjExt) + "%");
+          $("#csll5-ext").html(maskNumber(csllExt) + "%");
+          $("#cpp5-ext").html(maskNumber(cppExt) + "%");
+        } else {
+          $("#af5-ext").text(0);
+          $("#irpj5-ext").text(0);
+          $("#csll5-ext").text(0);
+          $("#cpp5-ext").text(0);
+        }
 
-        /*
-         * TABELA PRO LABORE 
-         */
+        if(receitaExt5 > 0) {
+          dasExt5 = receitaBr * (aliquota_ext/100);
+          dasExt5Dec = dasExt5.toFixed(2);
+          $('#dasext5').val(dasExt5Dec).mask("0.000,00", { reverse: true });
+        } else {
+          dasExt5 = 0;
+          dasExt5Dec = 0;
+          $('#dasext').val(dasExt5);
+        }
 
-        var salario = Math.round10(proLab[0], -4);
-        $('#proLab5').val(salario);
+        /* TABELA PRO-LABORE */
+        
+        var proLab = proLaboreR(receitaBr, aliquota_efetiva5);
 
-        // Se valor for alterado, usa esse
-        var proLab5 = $('#proLab5').val();
+        //salario = proLab[0];
+        var salario = 1302;
+        $('#proLab5').val(salario).mask("#.##0,00");
 
         /* Cálculo INSS */
 
-        //var valorInss = Math.round10(proLab[2], -4);
-        $('#inss5').text(proLab[2]).mask("R$ #.##0,00");
+        $('#inss5').text(maskValue(proLab[2]));
 
         /* Calculo IR */
         var percentIR = Math.round10(proLab[4], -4);
         $('#aliquotaIr5').html('<strong>IR ' + percentIR * 100 + '%</strong>');
 
         var totalIr = proLab[5];
-        //totalIr = Math.round10(totalIr, -4);
-        $('#ir5').html('R$ ' + totalIr).mask("R$ #.##0,00");
+        $('#ir5').html(maskValue(totalIr));
 
-        /* PL Liquido */
-
-        var proLaboreLiquido = proLab[3] - proLab[5];
-        proLaboreLiquido = Math.round10(proLaboreLiquido, -4);
-        $('#proLabLiquid5').html('R$ ' + proLaboreLiquido);
+        var proLaboreLiquido = proLab[3] - totalIr;
+        $('#proLabLiquid5').html(maskValue(proLaboreLiquido));
 
         /*** IMPOSTOS MENSAIS ***/
 
-        var psBr = dasBr + proLab[2] + proLab[5];
-        //psBr = Math.round10(psBr, -4);
-        $('#psbr5').text('R$ ' + psBr).mask("R$ #.##0,00");
+        var psBr = dasBr5 + proLab[2] + proLab[5];
+        $('#psbr5').text(maskValue(psBr));
 
-        var psExt = dasExt + proLab[2] + proLab[5];
-        //psExt = Math.round10(psExt, -4);
-        $('#psext5').text('R$ ' + psExt).mask("R$ #.##0,00");
-        
-      });
+        var psExt = dasExt5 + proLab[2] + proLab[5];
+        $('#psext5').text(maskValue(psExt));
 
-      /**
-       * Recálculo do IR e INSS ao alterar o valor do Pro-Labore
-       **/
+        /* Lucro Líquido inicial*/
+
+        var lucroLiquido = receitaBr - dasBr5Dec - dasExt5Dec;
+        $('#lucroLiquido5').text(maskValue(lucroLiquido));
+      }
+
+      $('#btn-five').click(calcSn5);
+
+      /*
+       * Recálculos do Pró-Labore V
+       */
 
       $('#recalcular').click(function() {
-        // Se valor for alterado, usa esse
-        var proLab5 = $('#proLab5').val();
+
+        var proLab = proLaboreR(receitaBr, aliquota_efetiva5);
+
+        var proLab5 = $('#proLab5').cleanVal();
 
         /*** Cálculo INSS ***/
 
@@ -748,8 +901,7 @@
           inss = 707.70;
         }
 
-        var valorInss = Math.round10(inss, -4);
-        $('#inss5').text('R$ ' + valorInss);
+        $('#inss5').text(maskValue(inss));
 
         /*** Cálculo IR ***/
 
@@ -782,38 +934,36 @@
 
         $('#aliquotaIr5').html('<strong>IR ' + ir * 100 + '%</strong>');
 
-        var totalIr = valorIR;
-        totalIr = Math.round10(totalIr, -4);
-        $('#ir5').html('R$ ' + totalIr);
+        $('#ir5').html(maskValue(valorIR));
 
         /*** PL Liquido ***/
 
         var proLaboreLiquido = irBase - valorIR;
-        proLaboreLiquido = Math.round10(proLaboreLiquido, -4);
-        $('#proLabLiquid5').html('R$ ' + proLaboreLiquido);
+        $('#proLabLiquid5').html(maskValue(proLaboreLiquido));
 
         /*** IMPOSTOS MENSAIS ***/
 
         var receita_mensal = $('#receita5').val();
         var fatorR = receita_mensal * 0.28;
 
-        var aliquota_efetiva = parseFloat($("#af5").html());
+        var af5 = parseFloat($("#af5").html());
         var irpj = parseFloat($("#irpj5").html());
         var csll = parseFloat($("#csll5").html());
         var cpp = parseFloat($("#cpp5").html());
         
-        var dasBr = receita_mensal * (aliquota_efetiva/100);
+        var dasBr = receita_mensal * (af5/100);
 
         var aliquota_ext = Number(irpj) + Number(csll) + Number(cpp);
         var dasExt = receita_mensal * (aliquota_ext/100);
 
-        var psBr = dasBr + inss + valorIR;
-        psBr = Math.round10(psBr, -4);
-        $('#psbr5').text('R$ ' + psBr);
+        var psBr = dasBr5 + inss + valorIR;
+        $('#psbr5').text(maskValue(psBr));
 
-        var psExt = dasExt + inss + valorIR;
-        psExt = Math.round10(psExt, -4);
-        $('#psext5').text('R$ ' + psExt);
+        var psExt = dasExt5 + inss + valorIR;
+        $('#psext5').text(maskValue(psExt));
+
+        var lucroLiquido = receitaBr - dasBr5 - dasExt5;
+        $('#lucroLiquido5').text(maskValue(lucroLiquido));
       })
     });
   </script>
