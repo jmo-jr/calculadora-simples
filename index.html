@@ -965,6 +965,17 @@
         var lucroLiquido = receitaBr - dasBr5 - dasExt5;
         $('#lucroLiquido5').text(maskValue(lucroLiquido));
       })
+
+      $('#btnUpdLl5').click( function() {
+        var receita = addDecimal($('#receita5').cleanVal());
+        var dasBr = $('#dasbr5').val();
+        var dasExt = $('#dasext5').val();
+        var asseCont = $('#acessoria5').val();
+        var outrasDesps = $('#outras5').val();
+
+        var lucroLiquido = receita - dasBr5Dec - dasExt5Dec - asseCont - outrasDesps;
+        $('#lucroLiquido5').text(maskValue(lucroLiquido));
+      });
     });
   </script>
   
