@@ -32,6 +32,19 @@ function maskValue(value) {
   return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
 }
 
+function currencyToNum(value) {
+  var cleanVal = value.replace("R$", "");
+  cleanVal = cleanVal.replace(".", "");
+  cleanVal = cleanVal.replace(",", ".");
+  return Number(cleanVal);
+}
+
+function percentToNum(value) {
+  var cleanVal = value.replace("%", "");
+  cleanVal = cleanVal.replace(",", ".");
+  return Number(cleanVal);
+}
+
 function maskNumber(value) {
   return new Intl.NumberFormat('pt-BR').format(value);
 }
@@ -738,34 +751,35 @@ function snfive(B4) {
  * @returns {Number} 4 ir (porcentagem).
  * @returns {Number} 5 valorIR.
  */
-function proLaboreR(receita_mensal, aliquota_efetiva, percentagem, numDeps) {
+function proLaboreR(receita_mensal, aliquota_efetiva, aliquota_iss, numDeps) {
 
   /*** Fator R = Pro-labore ***/
 
-  var percentPl = 0;
+  var aliqIss = 0;
   var descontoDeps = 0;
   var depValue = 189.59;
 
-  if (percentagem == undefined) {
-    percentPl = 0.28;
+  if (aliquota_iss == undefined) {
+    aliqIss = 0.28;
   } else {
-    percentPl = percentagem
+    aliqIss = aliquota_iss;
   }
 
   if (numDeps != undefined) {
     descontoDeps = numDeps * depValue;
   }
 
-  var fatorR = receita_mensal * percentPl;
-  //fatorR = Number(fatorR.toFixed(2));
+  var fatorR = receita_mensal * aliqIss;
 
   /*** Cálculo INSS ***/
 
-  var inssBase = fatorR * 0.11;
+  var salarioMin = 1302;
+  var inssBase = salarioMin * 0.11;
   var inss = 0;
 
-  if (fatorR <= 7613.80) {
-    inss = fatorR * 0.11;
+  if (fatorR <= 7613.80 || salarioMin <= 7613.80) {
+    //inss = fatorR * 0.11;
+    inss = salarioMin * 0.11;
   } else {
     inss = 837.51;
   }
@@ -778,7 +792,8 @@ function proLaboreR(receita_mensal, aliquota_efetiva, percentagem, numDeps) {
 
   /*** Cálculo IR ***/
 
-  var irBase = fatorR - inss - descontoDeps;
+  //var irBase = fatorR - inss - descontoDeps;
+  var irBase = salarioMin - inss - descontoDeps;
   let ir = 0;
   let reduzir = null;
 
@@ -806,6 +821,69 @@ function proLaboreR(receita_mensal, aliquota_efetiva, percentagem, numDeps) {
   var valorIR = (irBase * ir) - reduzir;
 
   return [ fatorR, inssBase, inss, irBase, ir, valorIR ];
+}
+
+/*
+ * Recálculo do Pró-Labore Atualizado
+ *
+ * @param   {Number}  proLab            Fator R / Pró-Labore.
+ * @param   {Number}  numDeps           Nº dependentes.
+ * 
+ * @returns {Number} 2 inss.
+ * @returns {Number} 3 irBase.
+ * @returns {Number} 4 ir (porcentagem).
+ * @returns {Number} 5 valorIR.
+ */
+function recalcProLab(proLab, numDeps) {
+
+  var descontoDeps = 0;
+  var depValue = 189.59;
+
+  if (numDeps != undefined) {
+    descontoDeps = numDeps * depValue;
+  }
+
+  /*** Cálculo INSS ***/
+
+  var inssBase = proLab * 0.11;
+  var inss = 0;
+
+  if (proLab <= 7613.80) {
+    inss = proLab * 0.11;
+  } else {
+    inss = 837.51;
+  }
+
+  /*** Cálculo IR ***/
+
+  var irBase = proLab - inss - descontoDeps;
+  let ir = 0;
+  let reduzir = null;
+
+  if (irBase <= 1903.98) {
+    ir = 0;
+    reduzir = 0;
+  }
+  if (irBase >= 1903.98 && irBase <= 2826.65) {
+    ir = 0.075;
+    reduzir = 142.80;
+  }
+  if (irBase >= 2826.66 && irBase <= 3751.05) {
+    ir = 0.15;
+    reduzir = 354.80;
+  }
+  if (irBase >= 3751.06 && irBase <= 4664.68) {
+    ir = 0.2250;
+    reduzir = 636.13;
+  }
+  if (irBase > 4664.68) {
+    ir = 0.2750;
+    reduzir = 869.36;
+  }
+
+  var valorIR = (irBase * ir) - reduzir;
+
+  return [ inss, irBase, ir, valorIR ];
 }
 
 /*
@@ -845,3 +923,4 @@ function lucroPresumido(salario, aliquota_iss) {
   return [ pis, cofins, iss, irpj, csll, irpjAdc ];
 
 }
+

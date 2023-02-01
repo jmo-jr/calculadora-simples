@@ -26,7 +26,6 @@ O objetivo é informar outras despesas além dos impostos para identificar os lu
 
   a) Ter a possibilidade do parâmetro do fator R ser em 28% OU 30%
 
-
 6. Tabela Lucro Presumido
 
   a) Acrescentar os mesmo campos do Prolabore que tem em Anexo III e V
@@ -40,7 +39,5 @@ O objetivo é informar outras despesas além dos impostos para identificar os lu
 9. Adicionar um header com logo da Ellun
 
 10. Adicionar campos de BTR12 e Salário no exterior
-
-DÚVIDAS
 
 1. O calculo do Pró-labore e IR, INSS

@@ -59,7 +59,7 @@
     <div class="tab-content mt-3 mb-3" id="myTabContent">
 
       <!-- ANEXO III -->
-      <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
+      <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
 
         <div class="container">
 
@@ -261,11 +261,11 @@
             </div>
           </div>
 
-          <h4>Total de Impostos Mensais</h4>
+          <h4 class="my-3">Total de Impostos Mensais</h4>
           <p><strong>Prestadores de Serviços para Empresas Brasileiras: </strong><span id="psbr"></span></p> 
           <p><strong>Prestadores de Serviços para Empresas Estrangeiras: </strong><span id="psext"></span></p>
 
-          <h4>Quadro de Despesas</h4>
+          <h4 class="mt-4 mb-3">Quadro de Despesas</h4>
           <p>
             <strong>Acessoria contábil: </strong><input type="tel" id="acessoria" name="acessoria" class="form-control d-inline" style="width:150px">
           </p>
@@ -454,11 +454,11 @@
             </div>
           </div>
 
-          <h4>Total de Impostos Mensais</h4>
+          <h4 class="my-3">Total de Impostos Mensais</h4>
           <p><strong>Prestadores de Serviços para Empresas Brasileiras: </strong><span id="psbr5"></span></p> 
           <p><strong>Prestadores de Serviços para Empresas Estrangeiras: </strong><span id="psext5"></span></p>
 
-          <h4>Quadro de Despesas</h4>
+          <h4 class="mt-4 mb-3">Quadro de Despesas</h4>
           <p>
             <strong>Acessoria contábil: </strong>
             <input type="tel" id="acessoria5" name="acessoria" class="form-control d-inline" style="width:150px">
@@ -479,7 +479,7 @@
       </div>
 
       <!-- LUCRO PRESUMIDO -->
-      <div class="tab-pane fade show active" id="lucro" role="tabpanel" aria-labelledby="lucro-tab">
+      <div class="tab-pane fade" id="lucro" role="tabpanel" aria-labelledby="lucro-tab">
         
         <div class="container">
           <div class="row">
@@ -611,18 +611,18 @@
             </div>
           </div>
 
-          <h4>Imposto Mensal a Pagar</h4>
+          <h4 class="my-3">Imposto Mensal a Pagar</h4>
           <p><strong>Impostos a Pagar BR: </strong><span id="psbrLucro"></span></p> 
           <p><strong>Impostos a Pagar EX: </strong><span id="psextLucro"></span></p>
 
-          <h4>Quadro de Despesas</h4>
+          <h4 class="mt-4 mb-3">Quadro de Despesas</h4>
           <p>
             <strong>Acessoria contábil: </strong>
-            <input type="tel" id="acessoriaLp" name="acessoria" class="form-control d-inline" style="width:150px">
+            <input type="tel" id="acessoriaLp" name="acessoria" class="form-control d-inline" style="width:150px" value="0">
           </p>
           <p>
             <strong>Outras despesas: </strong>
-            <input type="tel" id="outrasLp" name="outras" class="form-control d-inline" style="width:150px">
+            <input type="tel" id="outrasLp" name="outras" class="form-control d-inline" style="width:150px" value="0">
           </p>
           <button type="button" id="btnUpdLlLp" class="btn btn-primary">Atualizar</button>
           
@@ -796,7 +796,7 @@
         var rbtBr5 = addDecimal($('#rbt125').cleanVal());
         receitaBr = addDecimal($('#receita5').cleanVal());
         var rbtExt5 = addDecimal($('#rbt12Ext5').cleanVal());
-        var receitaExt5 = addDecimal($('#receitaExt5').cleanVal());
+        receitaExt5 = addDecimal($('#receitaExt5').cleanVal());
 
         /* RESULTADO BR */
 
@@ -865,7 +865,7 @@
         var proLab = proLaboreR(receitaBr, aliquota_efetiva5);
 
         //salario = proLab[0];
-        var salario = 1302;
+        salario = 1302;
         $('#proLab5').val(salario).mask("#.##0,00");
 
         /* Cálculo INSS */
@@ -892,98 +892,65 @@
 
         /* Lucro Líquido inicial*/
 
-        var lucroLiquido = receitaBr - dasBr5Dec - dasExt5Dec;
+        var lucroLiquido = receitaBr + receitaExt5 - salario - dasBr5Dec - dasExt5Dec;
         $('#lucroLiquido5').text(maskValue(lucroLiquido));
       }
 
+      /* Calcular Simples Anexo V */
+
       $('#btn-five').click(calcSn5);
 
-      /*
-       * Recálculos do Pró-Labore V
-       */
+      /* Recálculos do Pró-Labore V */
 
       $('#recalcular').click(function() {
 
-        var proLab = proLaboreR(receitaBr, aliquota_efetiva5);
-
         var proLab5 = $('#proLab5').cleanVal();
+        var newProLab = recalcProLab(proLab5);
 
-        /*** Cálculo INSS ***/
+        var inss5 = newProLab[0];
+        var irBase5 = newProLab[1];
+        var ir5 = newProLab[2];
+        var valorIr5 = newProLab[3];
+        var proLaboreLiquido5 = irBase5 - valorIr5;
 
-        var inssBase = proLab5 * 0.11;
-        var inss = 0;
+        // Set INSS
+        $('#inss5').text(maskValue(inss5));
 
-        if (inssBase <= 707.70) {
-          inss = inssBase;
-        } else {
-          inss = 707.70;
-        }
+        // Set IR
+        $('#aliquotaIr5').html('<strong>IR ' + ir5 * 100 + '%</strong>');
+        $('#ir5').html(maskValue(valorIr5));
 
-        $('#inss5').text(maskValue(inss));
-
-        /*** Cálculo IR ***/
-
-        var irBase = proLab5 - inss;
-        let ir = 0;
-        let reduzir = null;
-
-        if (irBase <= 1903.98) {
-          ir = 0;
-          reduzir = 0;
-        }
-        if (irBase >= 1903.98 && irBase <= 2826.65) {
-          ir = 0.075;
-          reduzir = 142.80;
-        }
-        if (irBase >= 2826.66 && irBase <= 3751.05) {
-          ir = 0.15;
-          reduzir = 354.80;
-        }
-        if (irBase >= 3751.06 && irBase <= 4664.68) {
-          ir = 0.2250;
-          reduzir = 636.13;
-        }
-        if (irBase > 4664.68) {
-          ir = 0.2750;
-          reduzir = 869.36;
-        }
-
-        var valorIR = (irBase * ir) - reduzir;
-
-        $('#aliquotaIr5').html('<strong>IR ' + ir * 100 + '%</strong>');
-
-        $('#ir5').html(maskValue(valorIR));
-
-        /*** PL Liquido ***/
-
-        var proLaboreLiquido = irBase - valorIR;
-        $('#proLabLiquid5').html(maskValue(proLaboreLiquido));
+        // Set PL Liquido
+        $('#proLabLiquid5').html(maskValue(proLaboreLiquido5));
 
         /*** IMPOSTOS MENSAIS ***/
 
-        var receita_mensal = $('#receita5').val();
+        var receita_mensal = addDecimal($('#receita5').cleanVal());
         var fatorR = receita_mensal * 0.28;
 
-        var af5 = parseFloat($("#af5").html());
-        var irpj = parseFloat($("#irpj5").html());
-        var csll = parseFloat($("#csll5").html());
-        var cpp = parseFloat($("#cpp5").html());
+        var af5 = percentToNum($("#af5").html());
+        var irpj = percentToNum($("#irpj5").html());
+        var csll = percentToNum($("#csll5").html());
+        var cpp = percentToNum($("#cpp5").html());
         
-        var dasBr = receita_mensal * (af5/100);
+        var dasBr5 = receita_mensal * (af5/100);
+        var aliquota_ext = irpj + csll + cpp;
+        var dasExt5 = receita_mensal * (aliquota_ext/100);
 
-        var aliquota_ext = Number(irpj) + Number(csll) + Number(cpp);
-        var dasExt = receita_mensal * (aliquota_ext/100);
+        //Total de Impostos
+        var psBr5 = dasBr5 + inss5 + valorIr5;
+        $('#psbr5').text(maskValue(psBr5));
 
-        var psBr = dasBr5 + inss + valorIR;
-        $('#psbr5').text(maskValue(psBr));
+        var psExt5 = dasExt5 + inss5 + valorIr5;
+        $('#psext5').text(maskValue(psExt5));
 
-        var psExt = dasExt5 + inss + valorIR;
-        $('#psext5').text(maskValue(psExt));
+        /*** LUCRO LIQUIDO ***/
 
-        var lucroLiquido = receitaBr - dasBr5 - dasExt5;
+        var lucroLiquido = receitaBr + receitaExt5 - salario - dasBr5Dec - dasExt5Dec;
         $('#lucroLiquido5').text(maskValue(lucroLiquido));
       })
 
+      /* Atualizar Lucro Líquido */
       $('#btnUpdLl5').click( function() {
         var receita = addDecimal($('#receita5').cleanVal());
         var dasBr = $('#dasbr5').val();
@@ -991,7 +958,7 @@
         var asseCont = $('#acessoria5').val();
         var outrasDesps = $('#outras5').val();
 
-        var lucroLiquido = receita - dasBr5Dec - dasExt5Dec - asseCont - outrasDesps;
+        var lucroLiquido = receitaBr + receitaExt5 - salario - dasBr5Dec - dasExt5Dec - asseCont - outrasDesps;
         $('#lucroLiquido5').text(maskValue(lucroLiquido));
       });
     });
@@ -1000,8 +967,8 @@
   <!-- SCRIPTS LUCRO -->
   <script>
     $(document).ready( function() {
-      $('#btn-lucro').click( function() {
 
+      $('#btn-lucro').click( function() {
         var salario = addDecimal($('#salario').cleanVal());
         var aliquota_iss = $('#issSelect').val();
 
@@ -1011,44 +978,42 @@
           var pisLl = result[0];
           var confinsLl = result[1];
           var issLl = result[2];
-          irpjLl = result[3];
-          csllLl = result[4];
-          irpjAdcLl = result[5];
+          irpjLp = result[3];
+          csllLp = result[4];
+          irpjAdcLp = result[5];
 
           $("#pisLucro").html(maskValue(pisLl));
           $("#cofinsLucro").html(maskValue(confinsLl));
           $("#issLucro").html(maskValue(issLl));
-          $("#irpjLucro").html(maskValue(irpjLl));
-          $("#csllLucro").html(maskValue(csllLl));
+          $("#irpjLucro").html(maskValue(irpjLp));
+          $("#csllLucro").html(maskValue(csllLp));
           $("#issSelected").html((aliquota_iss * 100) + "%");
-          $("#irpjAdc").html(maskValue(irpjAdcLl));
+          $("#irpjAdc").html(maskValue(irpjAdcLp));
 
-          irTotalLl = result.reduce((a, b) => a + b, 0);
+          irTotalLp = result.reduce((a, b) => a + b, 0);
         }
-
 
         /*
          * TABELA PRO LABORE LP
          */
-
         if(salario > 0) {
-          var proLab = proLaboreR(salario, aliquota_iss);
+          var proLab = proLaboreR(salario, 0, aliquota_iss);
 
-          var frLl = proLab[0];
-          var wtf = proLab[1];
-          var inssLl = proLab[2];
-          var irBaseLll = proLab[3];
-          var percentIrLl = proLab[4];
-          var irLl = proLab[5];
+          var frLp = proLab[0];
+          var inssBaseLp = proLab[1];
+          var inssLp = proLab[2];
+          var irBaseLp = proLab[3];
+          var percentIrLp = proLab[4];
+          var irLp = proLab[5];
 
           /*** Campo Pro-Labore ***/
           
           var valorProLabore = 1302;
-          $('#proLabLp').val(valorProLabore).mask("#.##0,00");;
+          $('#proLabLp').val(valorProLabore).mask("#.##0,00");
 
           /*** Linha INSS ***/
 
-          var valorInss = maskValue(inssLl);
+          var valorInss = maskValue(inssLp);
           $('#inssLp').text(valorInss);
 
           /*** Linha INSS PJ ***/
@@ -1060,32 +1025,38 @@
           /*** Linha IR ***/
 
           // Porcentagem IR
-          var percentIR = percentIrLl * 100;
+          var percentIR = percentIrLp * 100;
           $('#aliquotaIrLp').html('<strong>IR ' + percentIR.toFixed(2) + '%</strong>');
 
           // Valor IR
-          $('#irLp').html(maskValue(irLl));
+          $('#irLp').html(maskValue(irLp));
 
           /*** Linha Pro-Labore Líquido ***/
 
-          var proLaboreLiquido = irBaseLll - irLl;
+          var proLaboreLiquido = irBaseLp - irLp - valorInssPj;
           $('#proLabLiquidoLp').html(maskValue(proLaboreLiquido));
         
           /* 
           * IMPOSTO MENSAL A PAGAR
           *
           * Imposto a Pagar BR (Considerar todos os Impostos + IRPJ Adc)
-          * Imposto a Pagar EX (Que vai considerar somente IRPJ, CSLL e IRPJ Adc)
+          * Imposto a Pagar EX (Que vai considerar somente IRPJ, CSLp e IRPJ Adc)
           */
 
-          var psBrLl = irTotalLl + irpjAdcLl;
-          var psExtLl = irpjLl + csllLl + irpjAdcLl;
-          $("#psbrLucro").html(maskValue(psBrLl));
-          $("#psextLucro").html(maskValue(psExtLl));
-        
+          var psBrLp = irTotalLp + irpjAdcLp;
+          var psExtLp = irpjLp + csllLp + irpjAdcLp;
+          $("#psbrLucro").html(maskValue(psBrLp));
+          $("#psextLucro").html(maskValue(psExtLp));
+
+          var lucroLiquidoLp = salario - proLaboreLiquido;
+          $('#lucroLiquidoLp').text(maskValue(lucroLiquidoLp));
         }
 
       });
+
+      // Mascarar campos adicionais
+      $('#acessoriaLp').mask("##.##0,00", { reverse: true });
+      $('#outrasLp').mask("##.##0,00", { reverse: true });
 
       /***************************************
        *
@@ -1093,117 +1064,60 @@
        * 
        ***************************************/
 
-      $('#recalcularLp').click( function() {
-
-        // Se valor for alterado, usa esse
+      function recalcPlValues() {
         var proLabLp = $('#proLabLp').cleanVal();
-        var salario = addDecimal($('#salario').cleanVal());
-        var aliquota_iss = $('#issSelect').val();
 
-        //O Recálculo
-        var proLab = proLaboreR(salario, aliquota_iss);
+        var newProLab = recalcProLab(proLabLp);
 
-        frLp = proLab[0];
-        var wtf = proLab[1];
-        var inssLl = proLab[2];
-        var irBaseLll = proLab[3];
-        var percentIrLl = proLab[4];
-        var irLl = proLab[5];
+        var inssLp = newProLab[0];
+        var irBaseLp = newProLab[1];
+        var taxIrLp = newProLab[2];
+        var valorIrLp = newProLab[3];
+        var inssPjLp = proLabLp * 0.2;
+        proLaboreLiquidoLp = irBaseLp - valorIrLp;
 
-        /*** Campo Pro-Labore ***/
- 
-        $('#proLabLp').val(proLabLp).mask("#.##0,00");
+        // Set INSS
+        $('#inssLp').text(maskValue(inssLp));
 
-        /*** Linha INSS ***/
+        // Set IPPJ
+        $('#inssPjLp').text(maskValue(inssPjLp));
 
-        var valorInss = maskValue(inssLl);
-        $('#inssLp').text(valorInss);
+        // Set IR
+        $('#aliquotaIrLp').html('<strong>IR ' + taxIrLp * 100 + '%</strong>');
+        $('#irLp').html(maskValue(valorIrLp));
 
-        /*** Linha INSS PJ ***/
+        // Set PL Liquido
+        $('#proLabLiquidoLp').html(maskValue(proLaboreLiquidoLp));
 
-        var valorInssPj = proLabLp * 0.2;
-        var inssPj = maskValue(valorInssPj);
-        $('#inssPjLp').text(inssPj);
+        /*** IMPOSTOS MENSAIS ***/
 
-        /*** Linha IR ***/
+        var salarioLp = addDecimal($('#salario').cleanVal());
 
-        // Porcentagem IR
-        var percentIR = percentIrLl * 100;
-        $('#aliquotaIrLp').html('<strong>IR ' + percentIR.toFixed(2) + '%</strong>');
+        // Set Impostos a Pagar
+        var psBrLp = inssLp + valorIrLp;
+        $('#psbrLucro').text(maskValue(psBrLp));
 
-        // Valor IR
-        $('#irLp').html(maskValue(irLl));
-
-        /*** Linha Pro-Labore Líquido ***/
-
-        var proLaboreLiquido = irBaseLll - irLl;
-        $('#proLabLiquidoLp').html(maskValue(proLaboreLiquido));
+        var lucroLiquidoLp = salarioLp - window.proLaboreLiquidoLp;
+        $('#lucroLiquidoLp').text(maskValue(lucroLiquidoLp));
+      }
       
-        /* 
-        * IMPOSTO MENSAL A PAGAR
-        *
-        * Imposto a Pagar BR (Considerar todos os Impostos + IRPJ Adc)
-        * Imposto a Pagar EX (Que vai considerar somente IRPJ, CSLL e IRPJ Adc)
-        */
+      $('#recalcularLp').click(recalcPlValues);
 
-        var psBrLl = irTotalLl + irpjAdcLl;
-        var psExtLl = irpjLl + csllLl + irpjAdcLl;
-        $("#psbrLucro").html(maskValue(psBrLl));
-        $("#psextLucro").html(maskValue(psExtLl));
+      $('#btnUpdLlLp').click( function() {
+        var salario = addDecimal($('#salario').cleanVal());
+        var proLaboreLiquidoLp = $('#proLabLiquidoLp').text();
+        proLaboreLiquidoLp = currencyToNum(proLaboreLiquidoLp);
+        var asseCont = currencyToNum($('#acessoriaLp').val());
+        var outrasDesps = currencyToNum($('#outrasLp').val());
 
-        var lucroLiquido = receita - frLp;
-        $('#lucroLiquidoLp').text(maskValue(lucroLiquido));
+        console.log(salario, proLaboreLiquidoLp, asseCont, outrasDesps);
 
-        var calc = 0;
-        
-        if(calc > 0) {
-          var proLab = proLaboreR(salario, aliquota_iss);
-
-          var inssLl = proLab[2];
-
-          /*** Cálculo INSS ***/
-          $('#inssLp').text(inssLl).mask("R$ #.##0,00");
-
-          /*** Cálculo INSS PJ ***/
-          var inssPj = proLabLp * 0.2;
-          $('#inssPjLp').text(inssPj).mask("R$ #.##0,00");
-
-          /*** Cálculo IR ***/
-          /* Porcentagem IR */
-          var percentIR = proLab[4] * 100;
-          $('#aliquotaIrLp').html('<strong>IR ' + percentIR.toFixed(2) + '%</strong>');
-          /* Valor IR */
-          var totalIr = proLab[5];
-          $('#ir5').html(maskValue(totalIr));
-
-          /*** Pro-Labora Líquido ***/
-          var proLaboreLiquido = proLab[3] - proLab[5];
-          $('#proLabLiquid5').html(maskValue(proLaboreLiquido));
-
-          /*** IMPOSTOS MENSAIS ***/
-
-          var salario = $('#salario').val();
-          var aliquota_iss = $('#issSelect').val();
-
-          var lpResult = lucroPresumido(salario, aliquota_iss);
-
-          var psBrLp = maskValue(totalIr + inssPj + lpResult[5]);
-          var psExtLp = maskValue(lpResult[3] + lpResult[4] + lpResult[5]);
-          $("#psbrLucro").html(psBrLp);
-          $("#psextLucro").html(psExtLp);
-        }
-
-        $('#btnUpdLlLp').click( function() {
-          var receita = addDecimal($('#salario').cleanVal());
-          var asseCont = $('#acessoriaLp').val();
-          var outrasDesps = $('#outrasLp').val();
-
-          console.log(receita, frLp);
-
-          var lucroLiquido = receita - frLp - asseCont - outrasDesps;
+        if(asseCont > 0 || outrasDesps > 0) {
+          var lucroLiquido = salario - proLaboreLiquidoLp - asseCont - outrasDesps;
           $('#lucroLiquidoLp').text(maskValue(lucroLiquido));
-        });
-      })
+        }
+      });
+
     });
   </script>
 
