@@ -580,7 +580,7 @@
                     <td><strong>Pro-Labore</strong></td>
                     <td>R$ 
                       <div class="inline-input">
-                        <input type="tel" id="proLabLp" name="proLabLp" class="form-control" style="width:150px">
+                        <input type="tel" id="proLabLp" name="proLabLp" class="form-control" style="width:150px" data-mask="00.000.000,00" data-mask-reverse="true">
                         <button type="button" id="recalcularLp" class="btn btn-primary">Recalcular</button>
                       </div>
                     </td>
@@ -726,7 +726,8 @@
 
         /* TABELA PRO-LABORE */
 
-        var proLab = proLaboreR(receita_mensal, aliquota_efetiva, porcentagem, deps);
+        var receitasTotais = receita_mensal + receitaExt;
+        var proLab = proLaboreR(receitasTotais, aliquota_efetiva, porcentagem, deps);
 
         valorFR = proLab[0];
         $('#valorFR').html(maskValue(valorFR));
@@ -737,7 +738,7 @@
         $('#inss').text(maskValue(valorInss));
         
         var percentIr = proLab[4]
-        $('#aliquotaIr').html('<strong>IR ' + percentIr * 100 + '%</strong>');
+        $('#aliquotaIr').html('<strong>IR ' + maskNumber(percentIr * 100) + '%</strong>');
 
         var valorIr = proLab[5];
         $('#ir').html(maskValue(valorIr));
@@ -905,7 +906,6 @@
       $('#recalcular').click(function() {
 
         var proLab5 = addDecimal($('#proLab5').cleanVal());
-        console.log(proLab5);
         var newProLab = recalcProLab(proLab5);
 
         var inss5 = newProLab[0];
@@ -1009,8 +1009,8 @@
 
           /*** Campo Pro-Labore ***/
           
-          var valorProLabore = 1302;
-          $('#proLabLp').val(valorProLabore).mask("#.##0,00");
+          $('#proLabLp').val('1.302,00');
+          var valorProLabore = addDecimal($('#proLabLp').cleanVal());
 
           /*** Linha INSS ***/
 
@@ -1026,15 +1026,15 @@
           /*** Linha IR ***/
 
           // Porcentagem IR
-          var percentIR = percentIrLp * 100;
-          $('#aliquotaIrLp').html('<strong>IR ' + percentIR.toFixed(2) + '%</strong>');
+          var percentIR = maskNumber(percentIrLp * 100);
+          $('#aliquotaIrLp').html('<strong>IR ' + percentIR + '%</strong>');
 
           // Valor IR
           $('#irLp').html(maskValue(irLp));
 
           /*** Linha Pro-Labore Líquido ***/
 
-          var proLaboreLiquido = irBaseLp - irLp - valorInssPj;
+          var proLaboreLiquido = valorProLabore - inssLp - irLp;
           $('#proLabLiquidoLp').html(maskValue(proLaboreLiquido));
         
           /* 
@@ -1066,7 +1066,7 @@
        ***************************************/
 
       function recalcPlValues() {
-        var proLabLp = $('#proLabLp').cleanVal();
+        var proLabLp = addDecimal($('#proLabLp').cleanVal());
 
         var newProLab = recalcProLab(proLabLp);
 
@@ -1084,7 +1084,7 @@
         $('#inssPjLp').text(maskValue(inssPjLp));
 
         // Set IR
-        $('#aliquotaIrLp').html('<strong>IR ' + taxIrLp * 100 + '%</strong>');
+        $('#aliquotaIrLp').html('<strong>IR ' + maskNumber(taxIrLp * 100) + '%</strong>');
         $('#irLp').html(maskValue(valorIrLp));
 
         // Set PL Liquido
@@ -1110,8 +1110,6 @@
         proLaboreLiquidoLp = currencyToNum(proLaboreLiquidoLp);
         var asseCont = currencyToNum($('#acessoriaLp').val());
         var outrasDesps = currencyToNum($('#outrasLp').val());
-
-        console.log(salario, proLaboreLiquidoLp, asseCont, outrasDesps);
 
         if(asseCont > 0 || outrasDesps > 0) {
           var lucroLiquido = salario - proLaboreLiquidoLp - asseCont - outrasDesps;

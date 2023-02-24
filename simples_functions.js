@@ -778,8 +778,8 @@ function proLaboreR(receita_mensal, aliquota_efetiva, aliquota_iss, numDeps) {
   var inss = 0;
 
   if (fatorR <= 7613.80 || salarioMin <= 7613.80) {
-    //inss = fatorR * 0.11;
-    inss = salarioMin * 0.11;
+    inss = fatorR * 0.11;
+    //inss = salarioMin * 0.11;
   } else {
     inss = 837.51;
   }
@@ -792,8 +792,8 @@ function proLaboreR(receita_mensal, aliquota_efetiva, aliquota_iss, numDeps) {
 
   /*** Cálculo IR ***/
 
-  //var irBase = fatorR - inss - descontoDeps;
-  var irBase = salarioMin - inss - descontoDeps;
+  var irBase = fatorR - inss - descontoDeps;
+  //var irBase = salarioMin - inss - descontoDeps;
   let ir = 0;
   let reduzir = null;
 
