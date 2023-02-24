@@ -351,8 +351,8 @@
         </div>
 
         <!-- PERCENTUAIS -->
-
         <div class="container">
+
           <div class="row">
             <div class="col">
 
@@ -427,7 +427,7 @@
                     <td><strong>Pro-Labore</strong></td>
                     <td>R$ 
                       <div class="inline-input">
-                        <input type="tel" id="proLab5" name="rbt12" class="form-control" style="width:150px">
+                        <input type="tel" id="proLab5" name="rbt12" class="form-control" style="width:150px" data-mask="00.000.000,00" data-mask-reverse="true">
                         <button type="button" id="recalcular" class="btn btn-primary">Recalcular</button>
                       </div>
                     </td>
@@ -865,8 +865,8 @@
         var proLab = proLaboreR(receitaBr, aliquota_efetiva5);
 
         //salario = proLab[0];
-        salario = 1302;
-        $('#proLab5').val(salario).mask("#.##0,00");
+        salario = "1.302,00";
+        $('#proLab5').val(salario);
 
         /* Cálculo INSS */
 
@@ -904,7 +904,8 @@
 
       $('#recalcular').click(function() {
 
-        var proLab5 = $('#proLab5').cleanVal();
+        var proLab5 = addDecimal($('#proLab5').cleanVal());
+        console.log(proLab5);
         var newProLab = recalcProLab(proLab5);
 
         var inss5 = newProLab[0];
