@@ -262,8 +262,8 @@
           </div>
 
           <h4 class="my-3">Total de Impostos Mensais</h4>
-          <p><strong>Prestadores de Serviços para Empresas Brasileiras: </strong><span id="psbr"></span></p> 
-          <p><strong>Prestadores de Serviços para Empresas Estrangeiras: </strong><span id="psext"></span></p>
+          <p><strong>Prestadores de Serviços para Empresas Brasileiras: </strong><span id="psbr">0</span></p> 
+          <p><strong>Prestadores de Serviços para Empresas Estrangeiras: </strong><span id="psext">0</span></p>
 
           <h4 class="mt-4 mb-3">Quadro de Despesas</h4>
           <p>
@@ -728,10 +728,10 @@
 
         var receitasTotais = receita_mensal + receitaExt;
         var proLab = proLaboreR(receitasTotais, aliquota_efetiva, porcentagem, deps);
-
+        
         valorFR = proLab[0];
-        $('#valorFR').html(maskValue(valorFR));
 
+        $('#valorFR').html(maskValue(valorFR));
         $('#proLab').html(maskValue(valorFR));
 
         var valorInss = proLab[2];
@@ -744,22 +744,28 @@
         $('#ir').html(maskValue(valorIr));
 
         var valorIrBase = proLab[3];
-        var proLaboreLiquido = valorIrBase - valorIr;
+        // var proLaboreLiquido = valorIrBase - valorIr;
+        var proLaboreLiquido = valorFR - valorInss - valorIr;
+        console.log(valorFR + '-' + valorInss + '-' + valorIr + '=' + proLaboreLiquido)
         $('#proLabLiquid').html(maskValue(proLaboreLiquido));
 
         var proLabExt = proLaboreR(receitaExt, aliquota_ext, porcentagem, deps);
 
         /* Total de Impostos Mensais */
 
-        var psBr = dasBr + valorInss + valorIr;
-        $('#psbr').text(maskValue(psBr));
+        if(rbtBr > 0) {
+          var psBr = dasBr + dasExt + valorInss + valorIr;
+          $('#psbr').text(maskValue(psBr));
+        }
 
-        var psExt = dasExt + proLabExt[2] + proLabExt[5];
-        $('#psext').text(maskValue(psExt));
+        if(rbtExt > 0) {
+          var psExt = dasExt + proLabExt[2] + proLabExt[5];
+          $('#psext').text(maskValue(psExt));
+        }
 
         /* Lucro Líquido inicial*/
 
-        var lucroLiquido = receita_mensal - valorFR - dasBrDec - dasExtDec;
+        var lucroLiquido = receita_mensal + receitaExt - valorFR - dasBrDec - dasExtDec;
         $('#lucroLiquido').text(maskValue(lucroLiquido));
       }
       
@@ -776,12 +782,13 @@
 
       $('#btnUpdLl').click( function() {
         var receita = addDecimal($('#receita').cleanVal());
+        var recExt = addDecimal($('#receitaExt').cleanVal());
         var dasBr = $('#dasbr').val();
         var dasExt = $('#dasext').val();
         var asseCont = $('#acessoria').val();
         var outrasDesps = $('#outras').val();
 
-        var lucroLiquido = receita - valorFR - dasBrDec - dasExtDec - asseCont - outrasDesps;
+        var lucroLiquido = receita + recExt - valorFR - dasBrDec - dasExtDec - asseCont - outrasDesps;
         $('#lucroLiquido').text(maskValue(lucroLiquido));
       });
 

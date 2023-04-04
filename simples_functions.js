@@ -771,6 +771,10 @@ function proLaboreR(receita_mensal, aliquota_efetiva, aliquota_iss, numDeps) {
 
   var fatorR = receita_mensal * aliqIss;
 
+  if(fatorR > 7507.49) {
+    fatorR = 7507.49
+  } 
+
   /*** Cálculo INSS ***/
 
   var salarioMin = 1302;
