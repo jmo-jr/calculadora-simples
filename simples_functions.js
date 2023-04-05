@@ -852,10 +852,10 @@ function recalcProLab(proLab, numDeps) {
   var inssBase = proLab * 0.11;
   var inss = 0;
 
-  if (proLab <= 7613.80) {
+  if (proLab <= 7507.49) {
     inss = proLab * 0.11;
   } else {
-    inss = 837.51;
+    inss = 825.82;
   }
 
   /*** Cálculo IR ***/

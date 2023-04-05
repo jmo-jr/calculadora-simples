@@ -455,8 +455,8 @@
           </div>
 
           <h4 class="my-3">Total de Impostos Mensais</h4>
-          <p><strong>Prestadores de Serviços para Empresas Brasileiras: </strong><span id="psbr5"></span></p> 
-          <p><strong>Prestadores de Serviços para Empresas Estrangeiras: </strong><span id="psext5"></span></p>
+          <p><strong>Prestadores de Serviços para Empresas Brasileiras: </strong><span id="psbr5">0</span></p> 
+          <p><strong>Prestadores de Serviços para Empresas Estrangeiras: </strong><span id="psext5">0</span></p>
 
           <h4 class="mt-4 mb-3">Quadro de Despesas</h4>
           <p>
@@ -471,7 +471,7 @@
           
           <p>
             <strong>Lucro líquido: </strong>
-            <span id="lucroLiquido5"></span>
+            <span id="lucroLiquido5">0</span>
           </p>
 
         </div>
@@ -746,7 +746,6 @@
         var valorIrBase = proLab[3];
         // var proLaboreLiquido = valorIrBase - valorIr;
         var proLaboreLiquido = valorFR - valorInss - valorIr;
-        console.log(valorFR + '-' + valorInss + '-' + valorIr + '=' + proLaboreLiquido)
         $('#proLabLiquid').html(maskValue(proLaboreLiquido));
 
         var proLabExt = proLaboreR(receitaExt, aliquota_ext, porcentagem, deps);
@@ -841,11 +840,14 @@
 
         if(rbtExt5 > 0) {
           var res5Ext = snfive(rbtExt5);
+          console.log(res5Ext)
 
-          var aliquota_ext = Number(irpjBr) + Number(csllBr) + Number(cppBr);
+          //var aliquota_ext = Number(irpjBr) + Number(csllBr) + Number(cppBr);
           var irpjExt = res5Ext[1];
           var csllExt = res5Ext[2];
           var cppExt = res5Ext[5];
+          var aliquota_ext = Number(irpjExt) + Number(csllExt) + Number(cppExt);
+          console.log(aliquota_ext);
 
           $("#af5-ext").html(maskNumber(aliquota_ext) + "%");
           $("#irpj5-ext").html(maskNumber(irpjExt) + "%");
@@ -859,7 +861,7 @@
         }
 
         if(receitaExt5 > 0) {
-          dasExt5 = receitaBr * (aliquota_ext/100);
+          dasExt5 = receitaExt5 * (aliquota_ext/100);
           dasExt5Dec = dasExt5.toFixed(2);
           $('#dasext5').val(dasExt5Dec).mask("0.000,00", { reverse: true });
         } else {
@@ -870,32 +872,39 @@
 
         /* TABELA PRO-LABORE */
         
+        salario = 1302;
+        /*
+        PRECISO REVER ESSE CALCULO PARA RECEITABR + RECEITAEXT
+        */
         var proLab = proLaboreR(receitaBr, aliquota_efetiva5);
+        //0:fatorR, 1:inssBase, 2:inss, 3:irBase, 4:ir, 5:valorIR
 
         //salario = proLab[0];
-        salario = "1.302,00";
-        $('#proLab5').val(salario);
+        $('#proLab5').val('1.302,00');
 
         /* Cálculo INSS */
 
-        $('#inss5').text(maskValue(proLab[2]));
+        $('#inss5').text(maskValue(proLab[1]));
 
         /* Calculo IR */
-        var percentIR = Math.round10(proLab[4], -4);
-        $('#aliquotaIr5').html('<strong>IR ' + percentIR * 100 + '%</strong>');
+        var percentIR = proLab[4];
+        $('#aliquotaIr5').html('<strong>IR 0%</strong>');
 
         var totalIr = proLab[5];
-        $('#ir5').html(maskValue(totalIr));
+        $('#ir5').html('R$ 0,00');
 
-        var proLaboreLiquido = proLab[3] - totalIr;
+        // var proLaboreLiquido = proLab[3] - totalIr;
+        var proLaboreLiquido = 1302 - proLab[1];
         $('#proLabLiquid5').html(maskValue(proLaboreLiquido));
 
         /*** IMPOSTOS MENSAIS ***/
 
-        var psBr = dasBr5 + proLab[2] + proLab[5];
+        // var psBr = dasBr5 + proLab[2] + totalIr;
+        var psBr = dasBr5 + proLab[1];
         $('#psbr5').text(maskValue(psBr));
 
-        var psExt = dasExt5 + proLab[2] + proLab[5];
+        // var psExt = dasExt5 + proLab[2] + totalIr;
+        var psExt = dasExt5 + proLab[1];
         $('#psext5').text(maskValue(psExt));
 
         /* Lucro Líquido inicial*/
@@ -925,7 +934,7 @@
         $('#inss5').text(maskValue(inss5));
 
         // Set IR
-        $('#aliquotaIr5').html('<strong>IR ' + ir5 * 100 + '%</strong>');
+        $('#aliquotaIr5').html('<strong>IR ' + maskNumber(ir5 * 100) + '%</strong>');
         $('#ir5').html(maskValue(valorIr5));
 
         // Set PL Liquido
