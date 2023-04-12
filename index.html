@@ -656,6 +656,7 @@
         var rbtExt = addDecimal($('#rbt123Ext').cleanVal());
         var receitaExt = addDecimal($('#receitaExt').cleanVal());
         var deps = $('#dependentes').val();
+        var rendaTotal = receita_mensal + receitaExt;
 
         /* RESULTADO BR */
 
@@ -726,8 +727,7 @@
 
         /* TABELA PRO-LABORE */
 
-        var receitasTotais = receita_mensal + receitaExt;
-        var proLab = proLaboreR(receitasTotais, aliquota_efetiva, porcentagem, deps);
+        var proLab = proLaboreR(rendaTotal, aliquota_efetiva, porcentagem, deps);
         
         valorFR = proLab[0];
 
@@ -807,6 +807,8 @@
 
         /* RESULTADO BR */
 
+        // Cálculo Simples Brasil
+        aliquota_efetiva5 = 0;
         if(rbtBr5 > 0) {
           var res5 = snfive(rbtBr5);
 
@@ -827,6 +829,8 @@
           $("#iss5").html(maskNumber(issBr) + "%");
         }
 
+        // Cálculo DAS Brasil
+        dasBr5Dec = 0;
         if(receitaBr > 0) {
           dasBr5 = receitaBr * (aliquota_efetiva5/100);
           dasBr5Dec = dasBr5.toFixed(2);
@@ -838,16 +842,15 @@
 
         /* RESULTADO EXT */
 
+        // Cálculo Simples Exterior
+        var aliquota_ext = 0;
         if(rbtExt5 > 0) {
           var res5Ext = snfive(rbtExt5);
-          console.log(res5Ext)
-
-          //var aliquota_ext = Number(irpjBr) + Number(csllBr) + Number(cppBr);
+          
           var irpjExt = res5Ext[1];
           var csllExt = res5Ext[2];
           var cppExt = res5Ext[5];
-          var aliquota_ext = Number(irpjExt) + Number(csllExt) + Number(cppExt);
-          console.log(aliquota_ext);
+          aliquota_ext = Number(irpjExt) + Number(csllExt) + Number(cppExt);
 
           $("#af5-ext").html(maskNumber(aliquota_ext) + "%");
           $("#irpj5-ext").html(maskNumber(irpjExt) + "%");
@@ -860,6 +863,8 @@
           $("#cpp5-ext").text(0);
         }
 
+        // Cálculo DAS Exterior
+        dasExt5Dec = 0;
         if(receitaExt5 > 0) {
           dasExt5 = receitaExt5 * (aliquota_ext/100);
           dasExt5Dec = dasExt5.toFixed(2);
@@ -873,10 +878,10 @@
         /* TABELA PRO-LABORE */
         
         salario = 1302;
-        /*
-        PRECISO REVER ESSE CALCULO PARA RECEITABR + RECEITAEXT
-        */
-        var proLab = proLaboreR(receitaBr, aliquota_efetiva5);
+        var rendaTotalV = receitaBr + receitaExt5;
+        var aliquotaTotalV = aliquota_ext + aliquota_efetiva5;
+        
+        var proLab = proLaboreR(salario, aliquotaTotalV);
         //0:fatorR, 1:inssBase, 2:inss, 3:irBase, 4:ir, 5:valorIR
 
         //salario = proLab[0];
