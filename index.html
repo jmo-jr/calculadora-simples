@@ -482,12 +482,14 @@
       <div class="tab-pane fade" id="lucro" role="tabpanel" aria-labelledby="lucro-tab">
         
         <div class="container">
+
+          <!-- RECEITA NACIONAL -->
           <div class="row">
 
             <!-- Receita -->
             <div class="col-3">
               <div class="form-group">
-                <label for="salario">Receita Mensal</label>
+                <label for="salario">Receita Mensal (R$)</label>
                 <input type="tel" id="salario" class="form-control"  data-mask="0.000.000,00" data-mask-reverse="true" value="0">
               </div>
             </div>
@@ -508,6 +510,19 @@
 
           </div>
 
+          <!-- RECEITA EXTERIOR -->
+          <div class="row">
+
+            <!-- Receita -->
+            <div class="col-3">
+              <div class="form-group">
+                <label for="salario">Receita Mensal Ext.</label>
+                <input type="tel" id="salarioExt" class="form-control"  data-mask="0.000.000,00" data-mask-reverse="true" value="0">
+              </div>
+            </div>
+
+          </div>
+
           <div class="row">
             <div class="col">
               <button type="button" id="btn-lucro" class="btn btn-primary">Calcular</button>
@@ -516,13 +531,15 @@
         </div>
 
         <div class="container">
+
+          <!-- LUCRO PRESUMIDO NACIONAL -->
           <div class="row">
             <div class="col">
 
               <table id="presumido" class="table table-bordered text-center">
                 <thead>
                   <tr>
-                    <th colspan="5">Lucro Presumido</th>
+                    <th colspan="5">Lucro Presumido Brasil</th>
                   </tr>
                   <tr>
                     <th>PIS</th>
@@ -546,6 +563,35 @@
                     <td><span id="issLucro">0</span></td>
                     <td><span id="irpjLucro">0</span></td>
                     <td><span id="csllLucro">0</span></td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+          </div>
+
+          <!-- LUCRO PRESUMIDO EXTERIOR -->
+          <div class="row">
+            <div class="col">
+
+              <table id="presumidoExt" class="table table-bordered text-center">
+                <thead>
+                  <tr>
+                    <th colspan="5">Lucro Presumido Exterior</th>
+                  </tr>
+                  <tr>
+                    <th>IRPJ</th>
+                    <th>CSLL</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>4,80%</th>
+                    <th>2,88%</th>
+                  </tr>
+                  <tr>
+                    <td><span id="irpjLucroExt">0</span></td>
+                    <td><span id="csllLucroExt">0</span></td>
                   </tr>
                 </tbody>
               </table>
@@ -1010,7 +1056,23 @@
           $("#irpjLucro").html(maskValue(irpjLp));
           $("#csllLucro").html(maskValue(csllLp));
           $("#issSelected").html((aliquota_iss * 100) + "%");
-          $("#irpjAdc").html(maskValue(irpjAdcLp));
+          //$("#irpjAdc").html(maskValue(irpjAdcLp));
+
+          irTotalLp = result.reduce((a, b) => a + b, 0);
+        }
+
+        if(salarioExt > 0) {
+          var result = lucroPresumido(salarioExt, 0);
+
+          console.log(result)
+
+          irpjLpExt = result[3];
+          csllLpExt = result[4];
+          irpjAdcLpExt = result[5];
+          
+          $("#irpjLucroExt").html(maskValue(irpjLpExt));
+          $("#csllLucroExt").html(maskValue(csllLpExt));
+          //$("#irpjAdc").html(maskValue(irpjAdcLpExt));
 
           irTotalLp = result.reduce((a, b) => a + b, 0);
         }
@@ -1022,8 +1084,8 @@
           var proLab = proLaboreR(salario, 0, aliquota_iss);
 
           var frLp = proLab[0];
-          var inssBaseLp = proLab[1];
-          var inssLp = proLab[2];
+          //var inssBaseLp = proLab[1];
+          var inssLp = proLab[1];
           var irBaseLp = proLab[3];
           var percentIrLp = proLab[4];
           var irLp = proLab[5];
@@ -1066,7 +1128,7 @@
           */
 
           var psBrLp = irTotalLp + irpjAdcLp;
-          var psExtLp = irpjLp + csllLp + irpjAdcLp;
+          var psExtLp = irpjLpExt + csllLpExt + irpjAdcLp;
           $("#psbrLucro").html(maskValue(psBrLp));
           $("#psextLucro").html(maskValue(psExtLp));
 
