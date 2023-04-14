@@ -516,7 +516,7 @@
             <!-- Receita -->
             <div class="col-3">
               <div class="form-group">
-                <label for="salario">Receita Mensal Ext.</label>
+                <label for="salarioExt">Receita Mensal Ext.</label>
                 <input type="tel" id="salarioExt" class="form-control"  data-mask="0.000.000,00" data-mask-reverse="true" value="0">
               </div>
             </div>
@@ -1039,7 +1039,9 @@
       $('#btn-lucro').click( function() {
         var salario = addDecimal($('#salario').cleanVal());
         var aliquota_iss = $('#issSelect').val();
+        var salarioExt = addDecimal($('#salarioExt').cleanVal());
 
+        // Lucro Presumido Nacional
         if(salario > 0) {
           var result = lucroPresumido(salario, aliquota_iss);
 
@@ -1056,31 +1058,27 @@
           $("#irpjLucro").html(maskValue(irpjLp));
           $("#csllLucro").html(maskValue(csllLp));
           $("#issSelected").html((aliquota_iss * 100) + "%");
-          //$("#irpjAdc").html(maskValue(irpjAdcLp));
 
           irTotalLp = result.reduce((a, b) => a + b, 0);
         }
 
+        // Lucro Presumido Exterior
         if(salarioExt > 0) {
           var result = lucroPresumido(salarioExt, 0);
 
-          console.log(result)
-
+          //0 e 1 têm valores
           irpjLpExt = result[3];
           csllLpExt = result[4];
-          irpjAdcLpExt = result[5];
           
           $("#irpjLucroExt").html(maskValue(irpjLpExt));
           $("#csllLucroExt").html(maskValue(csllLpExt));
-          //$("#irpjAdc").html(maskValue(irpjAdcLpExt));
-
-          irTotalLp = result.reduce((a, b) => a + b, 0);
         }
 
         /*
          * TABELA PRO LABORE LP
          */
-        if(salario > 0) {
+        if(salario > 0 || salarioExt > 0) {
+
           var proLab = proLaboreR(salario, 0, aliquota_iss);
 
           var frLp = proLab[0];
@@ -1115,6 +1113,18 @@
           // Valor IR
           $('#irLp').html(maskValue(irLp));
 
+          // IRPJ Adicional
+
+          var salario32 = (salario + salarioExt) * 0.32;
+          irpjAdcLp = 0;
+
+          if (salario32 > 20000) {
+            var salarioBase = salario32 - 20000;
+            irpjAdcLp = salarioBase * 0.1;
+          }
+
+          $("#irpjAdc").html(maskValue(irpjAdcLp));
+
           /*** Linha Pro-Labore Líquido ***/
 
           var proLaboreLiquido = valorProLabore - inssLp - irLp;
@@ -1124,7 +1134,7 @@
           * IMPOSTO MENSAL A PAGAR
           *
           * Imposto a Pagar BR (Considerar todos os Impostos + IRPJ Adc)
-          * Imposto a Pagar EX (Que vai considerar somente IRPJ, CSLp e IRPJ Adc)
+          * Imposto a Pagar EX (Considerar somente IRPJ + CSLp + IRPJ Adc)
           */
 
           var psBrLp = irTotalLp + irpjAdcLp;
@@ -1132,7 +1142,7 @@
           $("#psbrLucro").html(maskValue(psBrLp));
           $("#psextLucro").html(maskValue(psExtLp));
 
-          var lucroLiquidoLp = salario - proLaboreLiquido;
+          var lucroLiquidoLp = salario + salarioExt - proLaboreLiquido;
           $('#lucroLiquidoLp').text(maskValue(lucroLiquidoLp));
         }
 
@@ -1160,6 +1170,8 @@
         var inssPjLp = proLabLp * 0.2;
         proLaboreLiquidoLp = irBaseLp - valorIrLp;
 
+        console.log(newProLab)
+
         // Set INSS
         $('#inssLp').text(maskValue(inssLp));
 
@@ -1176,12 +1188,15 @@
         /*** IMPOSTOS MENSAIS ***/
 
         var salarioLp = addDecimal($('#salario').cleanVal());
+        var salarioLpExt = addDecimal($('#salarioExt').cleanVal());
 
         // Set Impostos a Pagar
-        var psBrLp = inssLp + valorIrLp;
+        var psBrLp = irTotalLp + irpjAdcLp;
         $('#psbrLucro').text(maskValue(psBrLp));
+        var psExtLp = irpjLpExt + csllLpExt + irpjAdcLp;
+        $("#psextLucro").html(maskValue(psExtLp));
 
-        var lucroLiquidoLp = salarioLp - window.proLaboreLiquidoLp;
+        var lucroLiquidoLp = salarioLp + salarioLpExt - window.proLaboreLiquidoLp;
         $('#lucroLiquidoLp').text(maskValue(lucroLiquidoLp));
       }
       
