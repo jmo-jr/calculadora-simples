@@ -726,6 +726,7 @@
           $("#iss").html(maskNumber(issBr) + "%");
         }
 
+        dasBrDec = 0;
         if(receita_mensal > 0) {
           dasBr = receita_mensal * (aliquota_efetiva/100);
           dasBrDec = dasBr.toFixed(2);
@@ -799,18 +800,17 @@
         /* Total de Impostos Mensais */
 
         if(rbtBr > 0) {
-          var psBr = dasBr + dasExt + valorInss + valorIr;
+          var psBr = dasBr + valorInss + valorIr;
           $('#psbr').text(maskValue(psBr));
-        }
-
+        } else 
+        
         if(rbtExt > 0) {
           var psExt = dasExt + proLabExt[2] + proLabExt[5];
           $('#psext').text(maskValue(psExt));
         }
 
         /* Lucro Líquido inicial*/
-
-        var lucroLiquido = receita_mensal + receitaExt - valorFR - dasBrDec - dasExtDec;
+        var lucroLiquido = (receita_mensal + receitaExt) - valorFR - dasBrDec - dasExtDec;
         $('#lucroLiquido').text(maskValue(lucroLiquido));
       }
       
@@ -1169,8 +1169,6 @@
         var valorIrLp = newProLab[3];
         var inssPjLp = proLabLp * 0.2;
         proLaboreLiquidoLp = irBaseLp - valorIrLp;
-
-        console.log(newProLab)
 
         // Set INSS
         $('#inssLp').text(maskValue(inssLp));
