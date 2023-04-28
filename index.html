@@ -802,7 +802,7 @@
         if(rbtBr > 0) {
           var psBr = dasBr + valorInss + valorIr;
           $('#psbr').text(maskValue(psBr));
-        } else 
+        }
         
         if(rbtExt > 0) {
           var psExt = dasExt + proLabExt[2] + proLabExt[5];
@@ -950,13 +950,16 @@
 
         /*** IMPOSTOS MENSAIS ***/
 
-        // var psBr = dasBr5 + proLab[2] + totalIr;
-        var psBr = dasBr5 + proLab[1];
-        $('#psbr5').text(maskValue(psBr));
-
-        // var psExt = dasExt5 + proLab[2] + totalIr;
-        var psExt = dasExt5 + proLab[1];
-        $('#psext5').text(maskValue(psExt));
+        if(rbtBr5 > 0) {
+          // var psBr = dasBr5 + proLab[2] + totalIr;
+          var psBr = dasBr5 + proLab[1];
+          $('#psbr5').text(maskValue(psBr));
+        }
+        if(rbtExt5 > 0) {
+          // var psExt = dasExt5 + proLab[2] + totalIr;
+          var psExt = dasExt5 + proLab[1];
+          $('#psext5').text(maskValue(psExt));
+        }
 
         /* Lucro Líquido inicial*/
 
@@ -968,7 +971,9 @@
 
       $('#btn-five').click(calcSn5);
 
-      /* Recálculos do Pró-Labore V */
+      /***********
+        Recálculos do Pró-Labore V 
+      ************/
 
       $('#recalcular').click(function() {
 
@@ -996,6 +1001,8 @@
         var receita_mensal = addDecimal($('#receita5').cleanVal());
         var fatorR = receita_mensal * 0.28;
 
+        var receita_ext = addDecimal($('#receitaExt5').cleanVal());
+
         var af5 = percentToNum($("#af5").html());
         var irpj = percentToNum($("#irpj5").html());
         var csll = percentToNum($("#csll5").html());
@@ -1003,30 +1010,41 @@
         
         var dasBr5 = receita_mensal * (af5/100);
         var aliquota_ext = irpj + csll + cpp;
-        var dasExt5 = receita_mensal * (aliquota_ext/100);
+        //var dasExt5 = receita_ext * (aliquota_ext/100);
+        var dasExt5 = addDecimal($('#dasext5').cleanVal());
+
+        var rbtBr5 = addDecimal($('#rbt125').cleanVal());
+        var rbtExt5 = addDecimal($('#rbt12Ext5').cleanVal());
 
         //Total de Impostos
-        var psBr5 = dasBr5 + inss5 + valorIr5;
-        $('#psbr5').text(maskValue(psBr5));
 
-        var psExt5 = dasExt5 + inss5 + valorIr5;
-        $('#psext5').text(maskValue(psExt5));
+        if(rbtBr5 > 0) {
+          var psBr5 = dasBr5 + inss5 + valorIr5;
+          $('#psbr5').text(maskValue(psBr5));
+        }
+        if(rbtExt5 > 0) {
+          var psExt5 = dasExt5 + inss5 + valorIr5;
+          $('#psext5').text(maskValue(psExt5));
+        }
 
         /*** LUCRO LIQUIDO ***/
-
-        var lucroLiquido = receitaBr + receitaExt5 - salario - dasBr5Dec - dasExt5Dec;
+        var lucroLiquido = (receitaBr + receitaExt5) - proLab5 - dasBr5Dec - dasExt5Dec;
         $('#lucroLiquido5').text(maskValue(lucroLiquido));
       })
 
-      /* Atualizar Lucro Líquido */
+      /******** 
+      Atualizar Lucro Líquido 
+      *********/
+      
       $('#btnUpdLl5').click( function() {
+        var proLab5 = addDecimal($('#proLab5').cleanVal());
         var receita = addDecimal($('#receita5').cleanVal());
         var dasBr = $('#dasbr5').val();
         var dasExt = $('#dasext5').val();
         var asseCont = $('#acessoria5').val();
         var outrasDesps = $('#outras5').val();
-
-        var lucroLiquido = receitaBr + receitaExt5 - salario - dasBr5Dec - dasExt5Dec - asseCont - outrasDesps;
+        
+        var lucroLiquido = (receitaBr + receitaExt5) - proLab5 - dasBr5Dec - dasExt5Dec - asseCont - outrasDesps;
         $('#lucroLiquido5').text(maskValue(lucroLiquido));
       });
     });
