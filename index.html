@@ -1060,6 +1060,7 @@
         var salarioExt = addDecimal($('#salarioExt').cleanVal());
 
         // Lucro Presumido Nacional
+        irTotalLp = 0;
         if(salario > 0) {
           var result = lucroPresumido(salario, aliquota_iss);
 
@@ -1081,6 +1082,8 @@
         }
 
         // Lucro Presumido Exterior
+        irpjLpExt = 0;
+        csllLpExt = 0;
         if(salarioExt > 0) {
           var result = lucroPresumido(salarioExt, 0);
 
@@ -1095,16 +1098,19 @@
         /*
          * TABELA PRO LABORE LP
          */
+        irLp = 0;
+        inssLp = 0;
         if(salario > 0 || salarioExt > 0) {
 
           var proLab = proLaboreR(salario, 0, aliquota_iss);
 
           var frLp = proLab[0];
+
           //var inssBaseLp = proLab[1];
-          var inssLp = proLab[1];
+          inssLp = proLab[1];
           var irBaseLp = proLab[3];
           var percentIrLp = proLab[4];
-          var irLp = proLab[5];
+          irLp = proLab[5] > 0 ? proLab[5] : 0;
 
           /*** Campo Pro-Labore ***/
           
@@ -1144,7 +1150,6 @@
           $("#irpjAdc").html(maskValue(irpjAdcLp));
 
           /*** Linha Pro-Labore Líquido ***/
-
           var proLaboreLiquido = valorProLabore - inssLp - irLp;
           $('#proLabLiquidoLp').html(maskValue(proLaboreLiquido));
         
@@ -1155,12 +1160,20 @@
           * Imposto a Pagar EX (Considerar somente IRPJ + CSLp + IRPJ Adc)
           */
 
-          var psBrLp = irTotalLp + irpjAdcLp;
-          var psExtLp = irpjLpExt + csllLpExt + irpjAdcLp;
+          var psBrLp = 0;
+          var psExtLp = 0;
+
+          if(salario > 0) {
+            psBrLp = irTotalLp + inssLp + valorInssPj + irLp + irpjAdcLp;
+            psExtLp = irpjLpExt + csllLpExt + valorInssPj + inssLp;
+          } else {
+            psExtLp = irpjLpExt + csllLpExt + irpjAdcLp + valorInssPj + inssLp;
+          }
+
           $("#psbrLucro").html(maskValue(psBrLp));
           $("#psextLucro").html(maskValue(psExtLp));
 
-          var lucroLiquidoLp = salario + salarioExt - proLaboreLiquido;
+          var lucroLiquidoLp = salario + salarioExt - irTotalLp - irpjAdcLp - valorInssPj - valorProLabore;
           $('#lucroLiquidoLp').text(maskValue(lucroLiquidoLp));
         }
 
@@ -1207,12 +1220,12 @@
         var salarioLpExt = addDecimal($('#salarioExt').cleanVal());
 
         // Set Impostos a Pagar
-        var psBrLp = irTotalLp + irpjAdcLp;
+        var psBrLp = irTotalLp + inssLp + inssPjLp + valorIrLp + irpjAdcLp;
         $('#psbrLucro').text(maskValue(psBrLp));
-        var psExtLp = irpjLpExt + csllLpExt + irpjAdcLp;
+        var psExtLp = irpjLpExt + csllLpExt + irpjAdcLp + inssLp + inssPjLp;
         $("#psextLucro").html(maskValue(psExtLp));
 
-        var lucroLiquidoLp = salarioLp + salarioLpExt - window.proLaboreLiquidoLp;
+        var lucroLiquidoLp = salarioLp + salarioLpExt - irTotalLp - irpjAdcLp - inssPjLp - proLabLp;
         $('#lucroLiquidoLp').text(maskValue(lucroLiquidoLp));
       }
       
