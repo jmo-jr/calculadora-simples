@@ -772,12 +772,12 @@ function proLaboreR(receita_mensal, aliquota_efetiva, aliquota_iss, numDeps) {
   // salario * aliquota 
   var fatorR = receita_mensal * aliqIss;
 
-  var calcFatorR = 0;
-  if(fatorR > 7507.49) {
-    calcFatorR = 7507.49
-  } else {
-    calcFatorR = fatorR
-  }
+  var calcFatorR = fatorR;
+  // if(fatorR > 7507.49) {
+  //   calcFatorR = 7507.49
+  // } else {
+  //   calcFatorR = fatorR
+  // }
 
   /*** Cálculo INSS ***/
 

@@ -798,16 +798,20 @@
         var proLabExt = proLaboreR(receitaExt, aliquota_ext, porcentagem, deps);
 
         /* Total de Impostos Mensais */
+        var psBr = 0;
+        var psExt = 0;
 
         if(rbtBr > 0) {
-          var psBr = dasBr + valorInss + valorIr;
-          $('#psbr').text(maskValue(psBr));
+          psBr = dasBr + valorInss + valorIr;
         }
+        $('#psbr').text(maskValue(psBr));
         
-        if(rbtExt > 0) {
-          var psExt = dasExt + proLabExt[2] + proLabExt[5];
-          $('#psext').text(maskValue(psExt));
+        if(rbtExt > 0 && rbtBr > 0) {
+          psExt = dasExt;
+        } else if(rbtExt > 0) {
+          psExt = dasExt + proLabExt[2] + proLabExt[5];
         }
+        $('#psext').text(maskValue(psExt));
 
         /* Lucro Líquido inicial*/
         var lucroLiquido = (receita_mensal + receitaExt) - valorFR - dasBrDec - dasExtDec;
@@ -911,6 +915,7 @@
 
         // Cálculo DAS Exterior
         dasExt5Dec = 0;
+        dasExt5 = 0;
         if(receitaExt5 > 0) {
           dasExt5 = receitaExt5 * (aliquota_ext/100);
           dasExt5Dec = dasExt5.toFixed(2);
@@ -918,7 +923,7 @@
         } else {
           dasExt5 = 0;
           dasExt5Dec = 0;
-          $('#dasext').val(dasExt5);
+          $('#dasext5').val(dasExt5);
         }
 
         /* TABELA PRO-LABORE */
@@ -955,8 +960,10 @@
           var psBr = dasBr5 + proLab[1];
           $('#psbr5').text(maskValue(psBr));
         }
-        if(rbtExt5 > 0) {
-          // var psExt = dasExt5 + proLab[2] + totalIr;
+        if(rbtExt5 > 0 && rbtBr5 > 0) {
+          var psExt = dasExt5;
+          $('#psext5').text(maskValue(psExt));
+        } else if(rbtExt5 > 0 && rbtBr5 === 0) {
           var psExt = dasExt5 + proLab[1];
           $('#psext5').text(maskValue(psExt));
         }
@@ -1010,8 +1017,8 @@
         
         var dasBr5 = receita_mensal * (af5/100);
         var aliquota_ext = irpj + csll + cpp;
-        //var dasExt5 = receita_ext * (aliquota_ext/100);
-        var dasExt5 = addDecimal($('#dasext5').cleanVal());
+        var dasext5Val = $('#dasext5').val();
+        var dasExt5 = dasext5Val > 0 ? addDecimal($('#dasext5').cleanVal()) : 0;
 
         var rbtBr5 = addDecimal($('#rbt125').cleanVal());
         var rbtExt5 = addDecimal($('#rbt12Ext5').cleanVal());
@@ -1019,10 +1026,12 @@
         //Total de Impostos
 
         if(rbtBr5 > 0) {
+          // var psBr = dasBr5 + proLab[1];
           var psBr5 = dasBr5 + inss5 + valorIr5;
           $('#psbr5').text(maskValue(psBr5));
         }
         if(rbtExt5 > 0) {
+          // var psExt = dasExt5 + proLab[1];
           var psExt5 = dasExt5 + inss5 + valorIr5;
           $('#psext5').text(maskValue(psExt5));
         }
