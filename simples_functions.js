@@ -56,7 +56,7 @@ function addDecimal(value) {
 /*
  * Cálculo do Simples Nacional Anexo III
  *
- * @param  {Number}  B4  O RBT12.
+ * @param  {Number} O B4 (RBT12).
  * 
  * @returns {Number} 0 aliquota_efetiva.
  * @returns {Number} 1 irpj.
@@ -773,15 +773,10 @@ function proLaboreR(receita_mensal, aliquota_efetiva, aliquota_iss, numDeps) {
   var fatorR = receita_mensal * aliqIss;
 
   var calcFatorR = fatorR;
-  // if(fatorR > 7507.49) {
-  //   calcFatorR = 7507.49
-  // } else {
-  //   calcFatorR = fatorR
-  // }
 
   /*** Cálculo INSS ***/
 
-  var salarioMin = 1302;
+  var salarioMin = 1320;
   var inssBase = salarioMin * 0.11;
   var inss = 0;
 
@@ -792,12 +787,6 @@ function proLaboreR(receita_mensal, aliquota_efetiva, aliquota_iss, numDeps) {
     inss = 837.51;
   }
 
-  // if (inssBase <= 707.70) {
-  //   inss = inssBase;
-  // } else {
-  //   inss = 707.70;
-  // }
-
   /*** Cálculo IR ***/
 
   var irBase = calcFatorR - inss - descontoDeps;
@@ -805,23 +794,29 @@ function proLaboreR(receita_mensal, aliquota_efetiva, aliquota_iss, numDeps) {
   let ir = 0;
   let reduzir = null;
 
-  if (irBase <= 1903.98) {
+  // Alíquotas 2023
+  var faixa1 = 2112;
+  var faixa2 = 2826.65;
+  var faixa3 = 3751.05;
+  var faixa4 = 4664.68;
+
+  if (irBase <= faixa1) {
     ir = 0;
     reduzir = 0;
   }
-  if (irBase >= 1903.98 && irBase <= 2826.65) {
+  if (irBase > faixa1 && irBase <= faixa2) {
     ir = 0.075;
     reduzir = 142.80;
   }
-  if (irBase >= 2826.66 && irBase <= 3751.05) {
+  if (irBase > faixa2 && irBase <= faixa3) {
     ir = 0.15;
     reduzir = 354.80;
   }
-  if (irBase >= 3751.06 && irBase <= 4664.68) {
+  if (irBase > faixa3 && irBase <= faixa4) {
     ir = 0.2250;
     reduzir = 636.13;
   }
-  if (irBase > 4664.68) {
+  if (irBase > faixa4) {
     ir = 0.2750;
     reduzir = 869.36;
   }
@@ -845,7 +840,7 @@ function proLaboreR(receita_mensal, aliquota_efetiva, aliquota_iss, numDeps) {
 function recalcProLab(proLab, numDeps) {
 
   var descontoDeps = 0;
-  var depValue = 189.59;
+  var depValue = 189.59; // Valor por dependente
 
   if (numDeps != undefined) {
     descontoDeps = numDeps * depValue;
@@ -856,6 +851,7 @@ function recalcProLab(proLab, numDeps) {
   var inssBase = proLab * 0.11;
   var inss = 0;
 
+  // Limite Pro-labore
   if (proLab <= 7507.49) {
     inss = proLab * 0.11;
   } else {
@@ -868,23 +864,29 @@ function recalcProLab(proLab, numDeps) {
   let ir = 0;
   let reduzir = null;
 
-  if (irBase <= 1903.98) {
+  // Alíquotas 2023
+  var faixa1 = 2112;
+  var faixa2 = 2826.65;
+  var faixa3 = 3751.05;
+  var faixa4 = 4664.68;
+
+  if (irBase <= faixa1) {
     ir = 0;
     reduzir = 0;
   }
-  if (irBase >= 1903.98 && irBase <= 2826.65) {
+  if (irBase > faixa1 && irBase <= faixa2) {
     ir = 0.075;
     reduzir = 142.80;
   }
-  if (irBase >= 2826.66 && irBase <= 3751.05) {
+  if (irBase > faixa2 && irBase <= faixa3) {
     ir = 0.15;
     reduzir = 354.80;
   }
-  if (irBase >= 3751.06 && irBase <= 4664.68) {
+  if (irBase > faixa3 && irBase <= faixa4) {
     ir = 0.2250;
     reduzir = 636.13;
   }
-  if (irBase > 4664.68) {
+  if (irBase > faixa4) {
     ir = 0.2750;
     reduzir = 869.36;
   }
