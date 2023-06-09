@@ -1093,6 +1093,7 @@
         // Lucro Presumido Exterior
         irpjLpExt = 0;
         csllLpExt = 0;
+        var totalLpExt = 0;
         if(salarioExt > 0) {
           var result = lucroPresumido(salarioExt, 0);
 
@@ -1102,6 +1103,8 @@
           
           $("#irpjLucroExt").html(maskValue(irpjLpExt));
           $("#csllLucroExt").html(maskValue(csllLpExt));
+
+          totalLpExt = irpjLpExt + csllLpExt;
         }
 
         /*
@@ -1147,7 +1150,6 @@
           $('#irLp').html(maskValue(irLp));
 
           // IRPJ Adicional
-
           var salario32 = (salario + salarioExt) * 0.32;
           irpjAdcLp = 0;
 
@@ -1172,17 +1174,31 @@
           var psBrLp = 0;
           var psExtLp = 0;
 
-          if(salario > 0) {
-            psBrLp = irTotalLp + inssLp + valorInssPj + irLp + irpjAdcLp;
-            psExtLp = irpjLpExt + csllLpExt + valorInssPj + inssLp;
-          } else {
-            psExtLp = irpjLpExt + csllLpExt + irpjAdcLp + valorInssPj + inssLp;
+          if (salario > 0 && salarioExt > 0) {
+            // totalLPBr + IRPJAdc + INSSPj + INSS
+            psBrLp = irTotalLp + valorInssPj + inssLp + irLp;
+            // totalLPExt + IRPJAdc + INSSPj + INSS (Entra?!)
+            psExtLp = totalLpExt + valorInssPj + inssLp;
+          } else if (salario > 0 && salarioExt == 0) {
+            psBrLp = irTotalLp + valorInssPj + inssLp + irLp;
+          } else if (salario == 0 && salarioExt > 0) {
+            psExtLp = totalLpExt + irpjAdcLp + valorInssPj; // + inssLp <-- NÃO ENTRA?!
           }
 
           $("#psbrLucro").html(maskValue(psBrLp));
           $("#psextLucro").html(maskValue(psExtLp));
 
-          var lucroLiquidoLp = salario + salarioExt - irTotalLp - irpjAdcLp - valorInssPj - valorProLabore;
+          // LL = ReceitaBr + ReceitaExt - LPBr (irTotalLp) - LPExt (totalLpExt) - irpjAdcLp - ProLabLiquido
+          var lucroLiquidoLp = 0;
+
+          if(salario > 0 && salarioExt > 0) {
+            lucroLiquidoLp = salario - psBrLp + salarioExt - psExtLp - valorProLabore;
+          } else if (salario > 0 && salarioExt == 0) {
+            lucroLiquidoLp = salario - psBrLp - valorProLabore;
+          } else if (salario == 0 && salarioExt > 0) {
+            lucroLiquidoLp = salarioExt - psExtLp - valorProLabore; 
+          }
+
           $('#lucroLiquidoLp').text(maskValue(lucroLiquidoLp));
         }
 
@@ -1229,12 +1245,33 @@
         var salarioLpExt = addDecimal($('#salarioExt').cleanVal());
 
         // Set Impostos a Pagar
-        var psBrLp = irTotalLp + inssLp + inssPjLp + valorIrLp + irpjAdcLp;
+        var psBrLp = 0 //irTotalLp + inssLp + inssPjLp + valorIrLp + irpjAdcLp;
+        var psExtLp = 0 //irpjLpExt + csllLpExt + irpjAdcLp + inssLp + inssPjLp;
+
+        if (salario > 0 && salarioExt > 0) {
+          psBrLp = irTotalLp + inssPjLp + inssLp + valorIrLp;
+          psExtLp = totalLpExt + inssPjLp + inssLp;
+        } else if (salario > 0 && salarioExt == 0) {
+          psBrLp = irTotalLp + inssPjLp + inssLp + irLp;
+        } else if (salario == 0 && salarioExt > 0) {
+          psExtLp = totalLpExt + irpjAdcLp + inssPjLp; // + inssLp <-- NÃO ENTRA?!
+        }
+
         $('#psbrLucro').text(maskValue(psBrLp));
-        var psExtLp = irpjLpExt + csllLpExt + irpjAdcLp + inssLp + inssPjLp;
         $("#psextLucro").html(maskValue(psExtLp));
 
-        var lucroLiquidoLp = salarioLp + salarioLpExt - irTotalLp - irpjAdcLp - inssPjLp - proLabLp;
+        //--
+        //var lucroLiquidoLp = salarioLp + salarioLpExt - irTotalLp - irpjAdcLp - inssPjLp - proLabLp;
+        var lucroLiquidoLp = 0;
+
+        if(salarioLp > 0 && salarioLpExt > 0) {
+          lucroLiquidoLp = salarioLp - psBrLp + salarioLpExt - psExtLp - proLabLp;
+        } else if (salarioLp > 0 && salarioLpExt == 0) {
+          lucroLiquidoLp = salario - psBrLp - proLabLp;
+        } else if (salarioLp == 0 && salarioLpExt > 0) {
+          lucroLiquidoLp = salarioLpExt - psExtLp - proLabLp; 
+        }
+        
         $('#lucroLiquidoLp').text(maskValue(lucroLiquidoLp));
       }
       

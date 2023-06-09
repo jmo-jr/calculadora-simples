@@ -779,18 +779,17 @@ function proLaboreR(receita_mensal, aliquota_efetiva, aliquota_iss, numDeps) {
   var salarioMin = 1320;
   var inssBase = salarioMin * 0.11;
   var inss = 0;
+  var limitadorInss = 825.82;
 
   if (calcFatorR <= 7613.80 || salarioMin <= 7613.80) {
     inss = calcFatorR * 0.11;
-    //inss = salarioMin * 0.11;
   } else {
-    inss = 837.51;
+    inss = limitadorInss;
   }
 
   /*** Cálculo IR ***/
 
   var irBase = calcFatorR - inss - descontoDeps;
-  //var irBase = salarioMin - inss - descontoDeps;
   let ir = 0;
   let reduzir = null;
 
@@ -850,12 +849,13 @@ function recalcProLab(proLab, numDeps) {
 
   var inssBase = proLab * 0.11;
   var inss = 0;
+  var limitadorInss = 825.82;
 
   // Limite Pro-labore
   if (proLab <= 7507.49) {
     inss = proLab * 0.11;
   } else {
-    inss = 825.82;
+    inss = limitadorInss;
   }
 
   /*** Cálculo IR ***/
