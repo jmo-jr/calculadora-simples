@@ -936,7 +936,7 @@
         //0:fatorR, 1:inssBase, 2:inss, 3:irBase, 4:ir, 5:valorIR
 
         //salario = proLab[0];
-        $('#proLab5').val('1.302,00');
+        $('#proLab5').val(salario); // USAR salario!
 
         /* Cálculo INSS */
 
@@ -950,27 +950,39 @@
         $('#ir5').html('R$ 0,00');
 
         // var proLaboreLiquido = proLab[3] - totalIr;
-        var proLaboreLiquido = 1320 - proLab[1];
+        var proLaboreLiquido = salario - proLab[1];
         $('#proLabLiquid5').html(maskValue(proLaboreLiquido));
 
         /*** IMPOSTOS MENSAIS ***/
+        var impostosBr = 0;
+        var impostosExt = 0;
 
-        if(rbtBr5 > 0) {
-          // var psBr = dasBr5 + proLab[2] + totalIr;
-          var psBr = dasBr5 + proLab[1];
-          $('#psbr5').text(maskValue(psBr));
+        // Somente BR
+        if (rbtBr5 > 0 && rbtExt5 === 0) {
+          
+            impostosBr = dasBr5 + proLab[1];
+          
+        } 
+        // BR + Exterior
+        else if (rbtBr5 > 0 && rbtExt5 > 0) {
+
+            impostosBr = dasBr5 + proLab[1];
+            impostosExt = dasExt5;
+
         }
-        if(rbtExt5 > 0 && rbtBr5 > 0) {
-          var psExt = dasExt5;
-          $('#psext5').text(maskValue(psExt));
-        } else if(rbtExt5 > 0 && rbtBr5 === 0) {
-          var psExt = dasExt5 + proLab[1];
-          $('#psext5').text(maskValue(psExt));
+        // Somente Exterior 
+        else if (rbtBr5 === 0 && rbtExt5 > 0) {
+
+            impostosExt = dasExt5 + proLab[1];
+          
         }
+
+        $('#psbr5').text(maskValue(impostosBr));
+        $('#psext5').text(maskValue(impostosExt));
 
         /* Lucro Líquido inicial*/
-
-        var lucroLiquido = receitaBr + receitaExt5 - salario - dasBr5Dec - dasExt5Dec;
+        // LL = salarioBR + salarioExt - ImpostosBR - ImpostosExt - ProLabLiquido
+        var lucroLiquido = receitaBr + receitaExt5 - proLaboreLiquido - impostosBr - psExt; // ProLab Líquido
         $('#lucroLiquido5').text(maskValue(lucroLiquido));
       }
 
@@ -1024,11 +1036,11 @@
         var rbtExt5 = addDecimal($('#rbt12Ext5').cleanVal());
 
         //Total de Impostos
-
+        // TRATAR A SITUAÇÃO DA DUPLA RENDA
         if(rbtBr5 > 0) {
-          // var psBr = dasBr5 + proLab[1];
-          var psBr5 = dasBr5 + inss5 + valorIr5;
-          $('#psbr5').text(maskValue(psBr5));
+          // var impostosBr = dasBr5 + proLab[1];
+          var impostosBr5 = dasBr5 + inss5 + valorIr5;
+          $('#psbr5').text(maskValue(impostosBr5));
         }
         if(rbtExt5 > 0) {
           // var psExt = dasExt5 + proLab[1];
@@ -1171,32 +1183,32 @@
           * Imposto a Pagar EX (Considerar somente IRPJ + CSLp + IRPJ Adc)
           */
 
-          var psBrLp = 0;
+          var impostosBrLp = 0;
           var psExtLp = 0;
 
           if (salario > 0 && salarioExt > 0) {
             // totalLPBr + IRPJAdc + INSSPj + INSS
-            psBrLp = irTotalLp + valorInssPj + inssLp + irLp;
-            // totalLPExt + IRPJAdc + INSSPj + INSS (Entra?!)
+            impostosBrLp = irTotalLp + valorInssPj + inssLp + irLp;
+            // totalLPExt + IRPJAdc + INSSPj + INSS (Entra?!) N"AO ENTRA!
             psExtLp = totalLpExt + valorInssPj + inssLp;
           } else if (salario > 0 && salarioExt == 0) {
-            psBrLp = irTotalLp + valorInssPj + inssLp + irLp;
+            impostosBrLp = irTotalLp + valorInssPj + inssLp + irLp;
           } else if (salario == 0 && salarioExt > 0) {
             psExtLp = totalLpExt + irpjAdcLp + valorInssPj; // + inssLp <-- NÃO ENTRA?!
           }
 
-          $("#psbrLucro").html(maskValue(psBrLp));
+          $("#psbrLucro").html(maskValue(impostosBrLp));
           $("#psextLucro").html(maskValue(psExtLp));
 
           // LL = ReceitaBr + ReceitaExt - LPBr (irTotalLp) - LPExt (totalLpExt) - irpjAdcLp - ProLabLiquido
           var lucroLiquidoLp = 0;
 
           if(salario > 0 && salarioExt > 0) {
-            lucroLiquidoLp = salario - psBrLp + salarioExt - psExtLp - valorProLabore;
+            lucroLiquidoLp = salario - impostosBrLp + salarioExt - psExtLp - proLaboreLiquido;
           } else if (salario > 0 && salarioExt == 0) {
-            lucroLiquidoLp = salario - psBrLp - valorProLabore;
+            lucroLiquidoLp = salario - impostosBrLp - proLaboreLiquido;
           } else if (salario == 0 && salarioExt > 0) {
-            lucroLiquidoLp = salarioExt - psExtLp - valorProLabore; 
+            lucroLiquidoLp = salarioExt - psExtLp - proLaboreLiquido; 
           }
 
           $('#lucroLiquidoLp').text(maskValue(lucroLiquidoLp));
@@ -1245,19 +1257,19 @@
         var salarioLpExt = addDecimal($('#salarioExt').cleanVal());
 
         // Set Impostos a Pagar
-        var psBrLp = 0 //irTotalLp + inssLp + inssPjLp + valorIrLp + irpjAdcLp;
+        var impostosBrLp = 0 //irTotalLp + inssLp + inssPjLp + valorIrLp + irpjAdcLp;
         var psExtLp = 0 //irpjLpExt + csllLpExt + irpjAdcLp + inssLp + inssPjLp;
 
         if (salario > 0 && salarioExt > 0) {
-          psBrLp = irTotalLp + inssPjLp + inssLp + valorIrLp;
+          impostosBrLp = irTotalLp + inssPjLp + inssLp + valorIrLp;
           psExtLp = totalLpExt + inssPjLp + inssLp;
         } else if (salario > 0 && salarioExt == 0) {
-          psBrLp = irTotalLp + inssPjLp + inssLp + irLp;
+          impostosBrLp = irTotalLp + inssPjLp + inssLp + irLp;
         } else if (salario == 0 && salarioExt > 0) {
           psExtLp = totalLpExt + irpjAdcLp + inssPjLp; // + inssLp <-- NÃO ENTRA?!
         }
 
-        $('#psbrLucro').text(maskValue(psBrLp));
+        $('#psbrLucro').text(maskValue(impostosBrLp));
         $("#psextLucro").html(maskValue(psExtLp));
 
         //--
@@ -1265,9 +1277,9 @@
         var lucroLiquidoLp = 0;
 
         if(salarioLp > 0 && salarioLpExt > 0) {
-          lucroLiquidoLp = salarioLp - psBrLp + salarioLpExt - psExtLp - proLabLp;
+          lucroLiquidoLp = salarioLp - impostosBrLp + salarioLpExt - psExtLp - proLabLp;
         } else if (salarioLp > 0 && salarioLpExt == 0) {
-          lucroLiquidoLp = salario - psBrLp - proLabLp;
+          lucroLiquidoLp = salario - impostosBrLp - proLabLp;
         } else if (salarioLp == 0 && salarioLpExt > 0) {
           lucroLiquidoLp = salarioLpExt - psExtLp - proLabLp; 
         }

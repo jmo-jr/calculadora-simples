@@ -781,10 +781,10 @@ function proLaboreR(receita_mensal, aliquota_efetiva, aliquota_iss, numDeps) {
   var inss = 0;
   var limitadorInss = 825.82;
 
-  if (calcFatorR <= 7613.80 || salarioMin <= 7613.80) {
-    inss = calcFatorR * 0.11;
-  } else {
+  if (calcFatorR > 7507.49 || salarioMin > 7507.49) {
     inss = limitadorInss;
+  } else {
+    inss = calcFatorR * 0.11;
   }
 
   /*** Cálculo IR ***/
