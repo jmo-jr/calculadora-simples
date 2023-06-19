@@ -982,7 +982,7 @@
 
         /* Lucro Líquido inicial*/
         // LL = salarioBR + salarioExt - ImpostosBR - ImpostosExt - ProLabLiquido
-        var lucroLiquido = receitaBr + receitaExt5 - proLaboreLiquido - impostosBr - psExt; // ProLab Líquido
+        var lucroLiquido = receitaBr + receitaExt5 - proLaboreLiquido - impostosBr - impostosExt; // ProLab Líquido
         $('#lucroLiquido5').text(maskValue(lucroLiquido));
       }
 
@@ -1049,7 +1049,8 @@
         }
 
         /*** LUCRO LIQUIDO ***/
-        var lucroLiquido = (receitaBr + receitaExt5) - proLab5 - dasBr5Dec - dasExt5Dec;
+        // LL = salarioBR + salarioExt - ImpostosBR - ImpostosExt - ProLabLiquido
+        var lucroLiquido = (receitaBr + receitaExt5) - proLab5 - dasBr5 - dasExt5;
         $('#lucroLiquido5').text(maskValue(lucroLiquido));
       })
 
