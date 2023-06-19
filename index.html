@@ -936,51 +936,44 @@
         //0:fatorR, 1:inssBase, 2:inss, 3:irBase, 4:ir, 5:valorIR
 
         //salario = proLab[0];
-        $('#proLab5').val(salario); // USAR salario!
+        $('#proLab5').val('1.320,00');
 
         /* Cálculo INSS */
+        var inss5 = proLab[1];
+        $('#inss5').text(maskValue(inss5));
 
-        $('#inss5').text(maskValue(proLab[1]));
-
-        /* Calculo IR */
+        // Percentual do IR
         var percentIR = proLab[4];
         $('#aliquotaIr5').html('<strong>IR 0%</strong>');
-
+        // Valor do IR
         var totalIr = proLab[5];
         $('#ir5').html('R$ 0,00');
 
         // var proLaboreLiquido = proLab[3] - totalIr;
-        var proLaboreLiquido = salario - proLab[1];
+        var proLaboreLiquido = salario - inss5 - totalIr;
         $('#proLabLiquid5').html(maskValue(proLaboreLiquido));
 
         /*** IMPOSTOS MENSAIS ***/
+
         var impostosBr = 0;
         var impostosExt = 0;
-
         // Somente BR
         if (rbtBr5 > 0 && rbtExt5 === 0) {
-          
-            impostosBr = dasBr5 + proLab[1];
-          
+            impostosBr = dasBr5 + inss5 + totalIr;
         } 
         // BR + Exterior
         else if (rbtBr5 > 0 && rbtExt5 > 0) {
-
-            impostosBr = dasBr5 + proLab[1];
+            impostosBr = dasBr5 + inss5 + totalIr;
             impostosExt = dasExt5;
-
         }
         // Somente Exterior 
         else if (rbtBr5 === 0 && rbtExt5 > 0) {
-
-            impostosExt = dasExt5 + proLab[1];
-          
+            impostosExt = dasExt5 + inss5 + totalIr;
         }
-
         $('#psbr5').text(maskValue(impostosBr));
         $('#psext5').text(maskValue(impostosExt));
 
-        /* Lucro Líquido inicial*/
+        /* Lucro Líquido inicial */
         // LL = salarioBR + salarioExt - ImpostosBR - ImpostosExt - ProLabLiquido
         var lucroLiquido = receitaBr + receitaExt5 - proLaboreLiquido - impostosBr - impostosExt; // ProLab Líquido
         $('#lucroLiquido5').text(maskValue(lucroLiquido));
@@ -990,9 +983,9 @@
 
       $('#btn-five').click(calcSn5);
 
-      /***********
+      /*****************************
         Recálculos do Pró-Labore V 
-      ************/
+      ******************************/
 
       $('#recalcular').click(function() {
 
@@ -1030,27 +1023,34 @@
         var dasBr5 = receita_mensal * (af5/100);
         var aliquota_ext = irpj + csll + cpp;
         var dasext5Val = $('#dasext5').val();
-        var dasExt5 = dasext5Val > 0 ? addDecimal($('#dasext5').cleanVal()) : 0;
+        var dasExtDecimal = addDecimal($('#dasext5').cleanVal());
+        var dasExt5 = dasExtDecimal > 0 ? dasExtDecimal : 0;
 
         var rbtBr5 = addDecimal($('#rbt125').cleanVal());
         var rbtExt5 = addDecimal($('#rbt12Ext5').cleanVal());
 
         //Total de Impostos
-        // TRATAR A SITUAÇÃO DA DUPLA RENDA
-        if(rbtBr5 > 0) {
-          // var impostosBr = dasBr5 + proLab[1];
-          var impostosBr5 = dasBr5 + inss5 + valorIr5;
-          $('#psbr5').text(maskValue(impostosBr5));
+        var impostosBr = 0;
+        var impostosExt = 0;
+        // Somente BR
+        if (rbtBr5 > 0 && rbtExt5 === 0) {
+            impostosBr = dasBr5 + inss5 + valorIr5;
+        } 
+        // BR + Exterior
+        else if (rbtBr5 > 0 && rbtExt5 > 0) {
+            impostosBr = dasBr5 + inss5 + valorIr5;
+            impostosExt = dasExt5;
         }
-        if(rbtExt5 > 0) {
-          // var psExt = dasExt5 + proLab[1];
-          var psExt5 = dasExt5 + inss5 + valorIr5;
-          $('#psext5').text(maskValue(psExt5));
+        // Somente Exterior 
+        else if (rbtBr5 === 0 && rbtExt5 > 0) {
+            impostosExt = dasExt5 + inss5 + valorIr5;
         }
+        $('#psbr5').text(maskValue(impostosBr));
+        $('#psext5').text(maskValue(impostosExt));
 
         /*** LUCRO LIQUIDO ***/
         // LL = salarioBR + salarioExt - ImpostosBR - ImpostosExt - ProLabLiquido
-        var lucroLiquido = (receitaBr + receitaExt5) - proLab5 - dasBr5 - dasExt5;
+        var lucroLiquido = (receitaBr + receitaExt5) - impostosBr - impostosExt - proLaboreLiquido5;
         $('#lucroLiquido5').text(maskValue(lucroLiquido));
       })
 
