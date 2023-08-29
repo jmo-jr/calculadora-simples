@@ -805,19 +805,19 @@ function proLaboreR(receita_mensal, aliquota_efetiva, aliquota_iss, numDeps) {
   }
   if (irBase > faixa1 && irBase <= faixa2) {
     ir = 0.075;
-    reduzir = 142.80;
+    reduzir = 158.40;
   }
   if (irBase > faixa2 && irBase <= faixa3) {
     ir = 0.15;
-    reduzir = 354.80;
+    reduzir = 370.40;
   }
   if (irBase > faixa3 && irBase <= faixa4) {
     ir = 0.2250;
-    reduzir = 636.13;
+    reduzir = 651.73;
   }
   if (irBase > faixa4) {
     ir = 0.2750;
-    reduzir = 869.36;
+    reduzir = 884.96;
   }
 
   var valorIR = (irBase * ir) - reduzir;
@@ -876,19 +876,19 @@ function recalcProLab(proLab, numDeps) {
   }
   if (irBase > faixa1 && irBase <= faixa2) {
     ir = 0.075;
-    reduzir = 142.80;
+    reduzir = 158.40;
   }
   if (irBase > faixa2 && irBase <= faixa3) {
     ir = 0.15;
-    reduzir = 354.80;
+    reduzir = 370.40;
   }
   if (irBase > faixa3 && irBase <= faixa4) {
     ir = 0.2250;
-    reduzir = 636.13;
+    reduzir = 651.73;
   }
   if (irBase > faixa4) {
     ir = 0.2750;
-    reduzir = 869.36;
+    reduzir = 884.96;
   }
 
   var valorIR = (irBase * ir) - reduzir;
