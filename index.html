@@ -1082,6 +1082,7 @@
 
         // Lucro Presumido Nacional
         irTotalLp = 0;
+
         if(salario > 0) {
           var result = lucroPresumido(salario, aliquota_iss);
 
@@ -1183,11 +1184,13 @@
 
           var impostosBrLp = 0;
           var impostosExtLp = 0;
-          var totalImpLPresumidoBr = pisLl + confinsLl + issLl + irpjLp + csllLp;
-          var totalImpLPresumidoExt = irpjLpExt + csllLpExt;
+          var totalImpLPresumidoBr = 0;
+          var totalImpLPresumidoExt = 0;
 
           // 2 Salários
           if (salario > 0 && salarioExt > 0) {
+            totalImpLPresumidoBr = pisLl + confinsLl + issLl + irpjLp + csllLp;
+            totalImpLPresumidoExt = irpjLpExt + csllLpExt;
             // irTotalLp = pisLl + confinsLl + issLl + irpjLp + csllLp + irpjAdcLp
             impostosBrLp = totalImpLPresumidoBr + irpjAdcLp + valorInssPj + inssLp + irLp;
             impostosExtLp = totalImpLPresumidoExt;
@@ -1198,6 +1201,7 @@
           } 
           // Somente Ext => totalLPExt + IRPJAdc + INSSPj + INSS
           else if (salario == 0 && salarioExt > 0) {
+            totalImpLPresumidoExt = irpjLpExt + csllLpExt;
             impostosExtLp = totalImpLPresumidoExt + valorInssPj + inssLp  + irpjAdcLp;
           }
 
