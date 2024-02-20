@@ -776,7 +776,7 @@ function proLaboreR(receita_mensal, aliquota_efetiva, aliquota_iss, numDeps) {
 
   /*** Cálculo INSS ***/
 
-  var salarioMin = 1320;
+  var salarioMin = 1412;
   var inssBase = salarioMin * 0.11;
   var inss = 0;
   var limitadorInss = 825.82;
