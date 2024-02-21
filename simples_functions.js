@@ -54,6 +54,27 @@ function addDecimal(value) {
 }
 
 /*
+ * Variáveis Globais
+ *
+ * Valores que sofrem alteração constante
+ */
+//Salário Mínimo
+const salarioMin = 1412;
+
+//Alíquotas IR 2024
+const faixa1 = 2259.20;
+const faixa2 = 2826.65;
+const faixa3 = 3751.05;
+const faixa4 = 4664.68;
+
+//Valores descontos IR
+const descontoFaixa1 = 0; //0
+const descontoFaixa2 = 169.44 //7,5%
+const descontoFaixa3 = 381.44 //15%
+const descontoFaixa4 = 662.77 //22,5%
+const descontoFaixa5 = 896 //27,5%
+
+/*
  * Cálculo do Simples Nacional Anexo III
  *
  * @param  {Number} O B4 (RBT12).
@@ -776,7 +797,6 @@ function proLaboreR(receita_mensal, aliquota_efetiva, aliquota_iss, numDeps) {
 
   /*** Cálculo INSS ***/
 
-  var salarioMin = 1412;
   var inssBase = salarioMin * 0.11;
   var inss = 0;
   var limitadorInss = 825.82;
@@ -793,31 +813,25 @@ function proLaboreR(receita_mensal, aliquota_efetiva, aliquota_iss, numDeps) {
   let ir = 0;
   let reduzir = null;
 
-  // Alíquotas 2023
-  var faixa1 = 2112;
-  var faixa2 = 2826.65;
-  var faixa3 = 3751.05;
-  var faixa4 = 4664.68;
-
   if (irBase <= faixa1) {
     ir = 0;
     reduzir = 0;
   }
   if (irBase > faixa1 && irBase <= faixa2) {
     ir = 0.075;
-    reduzir = 158.40;
+    reduzir = descontoFaixa2;
   }
   if (irBase > faixa2 && irBase <= faixa3) {
     ir = 0.15;
-    reduzir = 370.40;
+    reduzir = descontoFaixa3;
   }
   if (irBase > faixa3 && irBase <= faixa4) {
     ir = 0.2250;
-    reduzir = 651.73;
+    reduzir = descontoFaixa4;
   }
   if (irBase > faixa4) {
     ir = 0.2750;
-    reduzir = 884.96;
+    reduzir = descontoFaixa4;
   }
 
   var valorIR = (irBase * ir) - reduzir;
@@ -864,31 +878,25 @@ function recalcProLab(proLab, numDeps) {
   let ir = 0;
   let reduzir = null;
 
-  // Alíquotas 2023
-  var faixa1 = 2112;
-  var faixa2 = 2826.65;
-  var faixa3 = 3751.05;
-  var faixa4 = 4664.68;
-
   if (irBase <= faixa1) {
     ir = 0;
     reduzir = 0;
   }
   if (irBase > faixa1 && irBase <= faixa2) {
     ir = 0.075;
-    reduzir = 158.40;
+    reduzir = descontoFaixa2;
   }
   if (irBase > faixa2 && irBase <= faixa3) {
     ir = 0.15;
-    reduzir = 370.40;
+    reduzir = descontoFaixa3;
   }
   if (irBase > faixa3 && irBase <= faixa4) {
     ir = 0.2250;
-    reduzir = 651.73;
+    reduzir = descontoFaixa4;
   }
   if (irBase > faixa4) {
     ir = 0.2750;
-    reduzir = 884.96;
+    reduzir = descontoFaixa5;
   }
 
   var valorIR = (irBase * ir) - reduzir;
