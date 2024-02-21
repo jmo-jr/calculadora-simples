@@ -337,7 +337,7 @@
             <div class="col-2">
               <div class="form-group">
                 <label for="dasext5">DAS EX</label>
-                <input type="tel" id="dasext5" name="dasext" class="form-control" disabled>
+                <input type="tel" id="dasext5" name="dasext" class="form-control" data-mask="0.000.000,00" data-mask-reverse="true" value="0" disabled>
               </div>
             </div>
 
@@ -956,9 +956,11 @@
 
         var impostosBr = 0;
         var impostosExt = 0;
+
         // Somente BR
         if (rbtBr5 > 0 && rbtExt5 === 0) {
             impostosBr = dasBr5 + inss5 + totalIr;
+            console.log(dasBr5, inss5, totalIr)
         } 
         // BR + Exterior
         else if (rbtBr5 > 0 && rbtExt5 > 0) {
@@ -1022,7 +1024,9 @@
         var dasBr5 = receita_mensal * (af5/100);
         var aliquota_ext = irpj + csll + cpp;
         var dasext5Val = $('#dasext5').val();
-        var dasExtDecimal = addDecimal($('#dasext5').cleanVal());
+        console.log($('#dasext5'))
+        var dasext5Clear = $('#dasext5').cleanVal();
+        var dasExtDecimal = addDecimal();
         var dasExt5 = dasExtDecimal > 0 ? dasExtDecimal : 0;
 
         var rbtBr5 = addDecimal($('#rbt125').cleanVal());
@@ -1031,9 +1035,11 @@
         //Total de Impostos
         var impostosBr = 0;
         var impostosExt = 0;
+
         // Somente BR
         if (rbtBr5 > 0 && rbtExt5 === 0) {
             impostosBr = dasBr5 + inss5 + valorIr5;
+            console.log(dasBr5, inss5, valorIr5)
         } 
         // BR + Exterior
         else if (rbtBr5 > 0 && rbtExt5 > 0) {
@@ -1044,6 +1050,7 @@
         else if (rbtBr5 === 0 && rbtExt5 > 0) {
             impostosExt = dasExt5 + inss5 + valorIr5;
         }
+        
         $('#psbr5').text(maskValue(impostosBr));
         $('#psext5').text(maskValue(impostosExt));
 
@@ -1258,11 +1265,11 @@
         // Set Impostos a Pagar
         impostosBrLp = 0;
         impostosExtLp = 0;
-        var totalImpLPresumidoBr = pisLl + confinsLl + issLl + irpjLp + csllLp;
         var totalImpLPresumidoExt = irpjLpExt + csllLpExt;
 
         // 2 Salários
         if (salarioLp > 0 && salarioLpExt > 0) {
+          var totalImpLPresumidoBr = pisLl + confinsLl + issLl + irpjLp + csllLp;
           // irTotalLp = pisLl + confinsLl + issLl + irpjLp + csllLp + irpjAdcLp
           impostosBrLp = totalImpLPresumidoBr + irpjAdcLp + inssPjLp + inssLp + valorIrLp;
           impostosExtLp = totalImpLPresumidoExt;
